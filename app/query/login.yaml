@@ -1,8 +1,0 @@
-유저조회: |
-  SELECT ui.user_id
-         ,ui.user_name
-         ,ui.user_email
-         ,ui.user_password         
-  FROM user_info ui
-  WHERE ui.user_id = {{ user_id }}
-  AND ui.is_enable = 1
