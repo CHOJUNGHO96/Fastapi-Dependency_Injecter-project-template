@@ -1,0 +1,5 @@
+전역환경값 조회: |
+  SELECT parameter
+        , COALESCE(value, default_value) AS value
+  FROM global_config gc
+  WHERE gc.is_enable = 1

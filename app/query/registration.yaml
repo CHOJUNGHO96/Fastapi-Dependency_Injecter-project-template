@@ -1,0 +1,18 @@
+유저등록: |
+  INSERT INTO user_info 
+  (
+    user_id 
+    , user_name 
+    , user_password 
+    , user_email
+    , is_enable
+  )
+  VALUES 
+  (
+    {{ user_id }}
+    , {{ user_name }} 
+    , {{ user_passwd }} 
+    , {{ user_email }}
+    , 1
+  )
+  RETURNING user_id;
