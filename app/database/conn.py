@@ -11,7 +11,7 @@ Base = declarative_base()
 class Database:
     def __init__(self, conf) -> None:
         self._engine = create_async_engine(
-            str(conf.get("DB_URL", "")),
+            url=f'postgresql+asyncpg://{str(conf.get("DB_USER", ""))}:{str(conf.get("DB_PASSWORD", ""))}@{str(conf.get("DB_HOST", ""))}:{str(conf.get("DB_PORT", ""))}/{str(conf.get("DB_NAME", ""))}',
             pool_size=5,
             max_overflow=10,
             pool_pre_ping=True,

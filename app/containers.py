@@ -1,5 +1,3 @@
-from dataclasses import asdict
-
 from dependency_injector import containers, providers
 from fastapi.requests import Request
 
@@ -15,7 +13,7 @@ from app.util.token import Token
 class Container(containers.DeclarativeContainer):
     # config 의존성 주입
     config = providers.Configuration()
-    config.from_dict(asdict(get_config()))
+    config.from_dict(get_config().dict())
 
     # token 의존성 주입
     token = providers.Singleton(Token)
