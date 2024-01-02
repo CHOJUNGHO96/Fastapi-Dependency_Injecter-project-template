@@ -1,0 +1,1 @@
+# ProjectTemplate-fastapi-dependency_injector
