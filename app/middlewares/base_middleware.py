@@ -12,6 +12,7 @@ from app.errors import exceptions as ex
 from app.errors.exceptions import APIException, InternalSqlEx, NotFoundUserEx
 from app.util.date_utils import D
 from app.util.logger import LogAdapter
+from app.database.redis_config import RedisConfig
 
 
 async def base_control_middlewares(request: Request, call_next):
@@ -29,6 +30,7 @@ async def base_control_middlewares(request: Request, call_next):
     container: containers = request.app.container
     config: get_config = container.config()
     logger: LogAdapter = container.logging()
+    redis: RedisConfig = container.redis()
 
     request.state.req_time = D.datetime()
     request.state.start = time.time()
@@ -77,7 +79,7 @@ async def base_control_middlewares(request: Request, call_next):
                 raise ex.InvalidJwtToken()
 
             # 레디스에서 유저정보 가져오기
-            user_info = request.app.state.redis.get_user_cahce(user_id=user_id)
+            user_info = redis.get_user_cahce(user_id=user_id)
 
             if user_info:
                 request.state.user = user_info
