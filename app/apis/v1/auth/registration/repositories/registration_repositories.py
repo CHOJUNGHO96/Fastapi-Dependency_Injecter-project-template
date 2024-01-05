@@ -18,7 +18,6 @@ class RegistrationRepository:
         """
         회원가입 Repository
         :param user_info: 유저정보
-        :return:
         """
         try:
             async with self.session_factory() as session:
@@ -34,7 +33,6 @@ class RegistrationRepository:
         """
         아이디, 이메일 중복체크 Repository
         :param user_info: 유저정보
-        :return:
         """
         try:
             async with self.session_factory() as session:

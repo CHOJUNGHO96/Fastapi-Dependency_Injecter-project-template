@@ -37,7 +37,7 @@ class MainConfig(BaseSettings):
     # TEST_DB_URL: str
 
     class Config:
-        env_prefix = ""  # 환경 변수 접두사 설정 (ex. "CJH_API_")
+        env_prefix = ""  # 환경 변수 접두사 설정 (ex. "API_")
 
 
 class LocalConfig(MainConfig):
@@ -65,7 +65,6 @@ class TestConfig(MainConfig):
     테스트환경 Config값
     """
 
-    # DB_URL: str = MainConfig.TEST_DB_URL
     ALLOW_SITE: list[str] = ["*"]
     TEST_MODE: bool = True
     DB_ECHO: bool = False
@@ -76,4 +75,4 @@ def get_config():
     환경변수에 따른 Config 반환
     """
     config = dict(prod=ProdConfig, test=TestConfig, local=LocalConfig)
-    return config[environ.get("CJH_API_MODE", "local")]()
+    return config[environ.get("API_MODE", "local")]()

@@ -22,7 +22,6 @@ class BaseMixin:
         :param session:
         :param auto_commit: 자동 커밋 여부
         :param kwargs: 적재 할 데이터
-        :return:
         """
         obj = cls()
         for col in obj.all_columns():
@@ -41,7 +40,6 @@ class BaseMixin:
         Simply get a Row
         :param session:
         :param kwargs:
-        :return:
         """
         sess = next(Database.session()) if not session else session
         query = sess.query(cls)
@@ -64,7 +62,6 @@ class BaseMixin:
         Simply get a Row
         :param session:
         :param kwargs:
-        :return:
         """
         cond = []
         for key, val in kwargs.items():

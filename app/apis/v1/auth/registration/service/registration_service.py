@@ -17,7 +17,6 @@ class RegistrationService:
         """
         회원가입 Service
         :param user_info: 유저정보
-        :return:
         """
 
         # 아이디, 이메일 중복체크

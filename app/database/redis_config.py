@@ -2,7 +2,8 @@ import json
 from typing import Optional
 
 from redis import Redis
-from app.database.schema.global_config import GlobalConfig
+
+# from app.database.schema.global_config import GlobalConfig
 
 
 class RedisConfig:
@@ -26,7 +27,6 @@ class RedisConfig:
     def get_user_cahce(self, user_id: str) -> str | None:
         """
         유저정보를 Redis에 저장
-        :return:
         """
         if self.redis is None:
             raise ValueError("Redis 인스턴스가 초기화되지 않았습니다.")
@@ -48,17 +48,16 @@ class RedisConfig:
         else:
             return None
 
-    def get_global_config(self) -> str:
-        """
-        전역설정값을 Redis에 저장
-        :return:
-        """
-        redis = self.redis
-        global_config = redis.get("global_config")
-        _global_config_data = GlobalConfig.filter(is_enable=1).all()
-        global_config_data = json.dumps({data.parameter: data.value for data in _global_config_data})
-        if global_config is None:
-            redis.set(name="global_config", value=str(global_config_data), ex=self.redis_expire_time)
-            global_config = redis.get("global_config")
-        global_config = global_config.decode()
-        return global_config
+    # def get_global_config(self) -> str:
+    #     """
+    #     전역설정값을 Redis에 저장
+    #     """
+    #     redis = self.redis
+    #     global_config = redis.get("global_config")
+    #     _global_config_data = GlobalConfig.filter(is_enable=1).all()
+    #     global_config_data = json.dumps({data.parameter: data.value for data in _global_config_data})
+    #     if global_config is None:
+    #         redis.set(name="global_config", value=str(global_config_data), ex=self.redis_expire_time)
+    #         global_config = redis.get("global_config")
+    #     global_config = global_config.decode()
+    #     return global_config

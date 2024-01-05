@@ -8,11 +8,11 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.common.config import get_config
+from app.database.redis_config import RedisConfig
 from app.errors import exceptions as ex
 from app.errors.exceptions import APIException, InternalSqlEx, NotFoundUserEx
 from app.util.date_utils import D
 from app.util.logger import LogAdapter
-from app.database.redis_config import RedisConfig
 
 
 async def base_control_middlewares(request: Request, call_next):

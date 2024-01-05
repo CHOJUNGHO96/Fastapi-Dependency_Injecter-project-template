@@ -1,11 +1,9 @@
 from sqlalchemy import Column, Integer, String
 
-from app.database.base import BaseMixin
-
 from .base import Base
 
 
-class User(Base, BaseMixin):
+class User(Base):
     __tablename__ = "user_info"
 
     user_number = Column(Integer, primary_key=True, index=True)
