@@ -1,0 +1,36 @@
+"""Tests module."""
+import pytest
+
+import asyncio
+from httpx import AsyncClient
+from app.database.schema.base import Base
+
+from fastapi import FastAPI
+
+@pytest.mark.asyncio
+async def test_registration(app: FastAPI):
+    await delete_data(app)
+    async with AsyncClient(app=app, base_url="http://127.0.0.1/api/v1") as client:
+        response = await client.post(
+            url="/auth/register",
+            json={
+                "user_email": "test@test.com",
+                "user_id": "test",
+                "user_password": "test123!",
+                "user_name": "테스트유저",
+            },
+        )
+    response_body = response.json()
+    assert response.status_code == 200
+    assert "access_token" in response_body.keys()
+@pytest.mark.asyncio
+async def test_login(app: FastAPI):
+    async with AsyncClient(app=app, base_url="http://127.0.0.1/api/v1") as client:
+        response = await client.post(
+            url="/auth/login",
+            json={"user_id": "test", "user_password": "test123!"},
+        )
+    response_body = response.json()
+    assert response.status_code == 200
+    assert "access_token" in response_body.keys()
+    client.headers.update({"authorization": f"{response_body['access_token']}"})

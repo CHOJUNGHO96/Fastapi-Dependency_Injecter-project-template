@@ -10,12 +10,19 @@ Base = declarative_base()
 
 class Database:
     def __init__(self, conf) -> None:
-        self._engine = create_async_engine(
-            url=f'postgresql+asyncpg://{str(conf.get("DB_USER", ""))}:{str(conf.get("DB_PASSWORD", ""))}@{str(conf.get("DB_HOST", ""))}:{str(conf.get("DB_PORT", ""))}/{str(conf.get("DB_NAME", ""))}',
-            pool_size=5,
-            max_overflow=10,
-            pool_pre_ping=True,
-        )
+        if conf.get("TEST_MODE", False) is True:
+            self._engine = create_async_engine(
+                url=f'postgresql+asyncpg://{str(conf.get("DB_USER", ""))}:{str(conf.get("DB_PASSWORD", ""))}@{str(conf.get("DB_HOST", ""))}:{str(conf.get("DB_PORT", ""))}/test_db',
+                pool_pre_ping=True,
+                echo=True,
+            )
+        else:
+            self._engine = create_async_engine(
+                url=f'postgresql+asyncpg://{str(conf.get("DB_USER", ""))}:{str(conf.get("DB_PASSWORD", ""))}@{str(conf.get("DB_HOST", ""))}:{str(conf.get("DB_PORT", ""))}/{str(conf.get("DB_NAME", ""))}',
+                pool_size=5,
+                max_overflow=10,
+                pool_pre_ping=True,
+            )
 
         self._session_factory = async_sessionmaker(
             autocommit=False,
@@ -36,3 +43,7 @@ class Database:
                 raise e
             finally:
                 await session.close()
+
+    @property
+    def engine(self):
+        return self._engine
