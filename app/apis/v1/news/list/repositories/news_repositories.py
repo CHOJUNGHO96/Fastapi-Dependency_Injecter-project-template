@@ -27,6 +27,7 @@ class NewsListRepository:
                     {
                         "article_id": news.article_id,
                         "title": news.title,
+                        "content": news.content,
                         "source": news.source,
                         "user_number": news.user_number,
                         "url": news.url,
