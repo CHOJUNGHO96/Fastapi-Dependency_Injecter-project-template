@@ -1,7 +1,6 @@
 import json
-from typing import Optional
 
-from redis import Redis
+from redis import asyncio as aioredis
 
 # from app.database.schema.global_config import GlobalConfig
 
@@ -11,36 +10,29 @@ class RedisConfig:
     Redis 설정
     """
 
-    host: Optional[str] = ""
-    port: int = 0
-    password: Optional[str] = None
-    redis_expire_time: int = 900
-    redis: Optional[Redis] = None
-
     def __init__(self, conf: dict):
-        self.host = str(conf.get("REDIS_HOST", ""))
-        self.port = int(str(conf.get("REDIS_PORT", 6379)))
-        self.password = str(conf.get("REDIS_PASSWORD"))
         self.redis_expire_time = int(str(conf.get("REDIS_EXPIRE_TIME", 900)))
-        self.redis = Redis(host=self.host, port=self.port, password=self.password)
+        self.client = aioredis.Redis(
+            host=str(conf.get("REDIS_HOST", "")),
+            port=int(str(conf.get("REDIS_PORT", 6379))),
+            password=str(conf.get("REDIS_PASSWORD")),
+        )
 
-    def get_user_cahce(self, user_id: str) -> str | None:
+    async def get_user_cahce(self, user_id: str) -> str | None:
         """
-        유저정보를 Redis에 저장
+        유저정보 캐시로 관리
         """
-        if self.redis is None:
+        if self.client is None:
             raise ValueError("Redis 인스턴스가 초기화되지 않았습니다.")
-        cahce_user = self.redis.get(f"cahce_user_info_{user_id}")
-        del cahce_user["user_password"]
-        user_info = json.dumps(cahce_user)
+        cahce_user = await self.client.get(f"cahce_user_info_{user_id}")
 
         if cahce_user is None:
-            self.redis.set(
+            await self.client.set(
                 name=f"cahce_user_info_{user_id}",
-                value=str(user_info),
+                value=str(json.dumps(cahce_user)),
                 ex=self.redis_expire_time,
             )
-            cahce_user = self.redis.get(f"cahce_user_info_{user_id}")
+            cahce_user = await self.client.get(f"cahce_user_info_{user_id}")
 
         if isinstance(cahce_user, bytes):
             cahce_user = cahce_user.decode()

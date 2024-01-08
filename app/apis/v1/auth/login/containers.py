@@ -9,6 +9,7 @@ class Container(containers.DeclarativeContainer):
     db = providers.Singleton()
     config = providers.Configuration()
     token = providers.Singleton()
+    redis = providers.Singleton()
 
     wiring_config = containers.WiringConfiguration(packages=["app.apis.v1.auth.login"])
 
@@ -16,4 +17,6 @@ class Container(containers.DeclarativeContainer):
     login_repository = providers.Factory(LoginRepository, session_factory=db.provided.session)
 
     # Service
-    login_service = providers.Factory(LoginService, login_repository=login_repository, config=config, token=token)
+    login_service = providers.Factory(
+        LoginService, login_repository=login_repository, config=config, token=token, redis=redis
+    )

@@ -25,6 +25,11 @@ class LoginRepository:
                 user = result.first()
                 if user is None:
                     return None
-                return {"user_password": user.user_password, "user_id": user.user_id}
+                return {
+                    "user_password": user.user_password,
+                    "user_id": user.user_id,
+                    "user_name": user.user_name,
+                    "user_email": user.user_email,
+                }
         except SQLAlchemyError as e:
             raise ex.InternalQuerryEx(ex=e)

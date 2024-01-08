@@ -7,3 +7,4 @@ class NewsBase(BaseModel):
     content: str | None = None
     source: str | None = None
     url: str | None = None
+    user_number: int | None = None

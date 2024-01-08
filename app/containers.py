@@ -1,10 +1,10 @@
-import os
-
 from dependency_injector import containers, providers
 from fastapi.requests import Request
 
 from app.apis.v1.auth.login.containers import Container as LoginContainer
-from app.apis.v1.auth.registration.containers import Container as RegistrationContainer
+from app.apis.v1.auth.registration.containers import \
+    Container as RegistrationContainer
+from app.apis.v1.news.list.containers import Container as NewsListContainer
 from app.common.config import get_config
 from app.database.conn import Database
 from app.database.redis_config import RedisConfig
@@ -30,5 +30,6 @@ class Container(containers.DeclarativeContainer):
     redis = providers.Singleton(RedisConfig, conf=config)
 
     # api 의존성 주입
-    login_service = providers.Container(LoginContainer, db=db, config=config, token=token)
+    login_service = providers.Container(LoginContainer, db=db, config=config, token=token, redis=redis)
     registration_service = providers.Container(RegistrationContainer, db=db, config=config, token=token)
+    news_list_service = providers.Container(NewsListContainer, db=db)

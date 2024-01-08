@@ -5,15 +5,17 @@ from fastapi.responses import JSONResponse
 
 from app.apis.v1.auth.login.repositories.login_repositories import \
     LoginRepository
+from app.database.redis_config import RedisConfig
 from app.models.user import UserBase
 from app.util.token import Token
 
 
 class LoginService:
-    def __init__(self, login_repository: LoginRepository, config: dict, token: Token) -> None:
+    def __init__(self, login_repository: LoginRepository, config: dict, token: Token, redis: RedisConfig) -> None:
         self._repository: LoginRepository = login_repository
         self._config = config
         self._token = token
+        self._redis = redis
 
     async def post_login_service(self, user_info: UserBase):
         """
@@ -32,6 +34,19 @@ class LoginService:
         if bcrypt.checkpw(password.encode("utf-8"), response_user["user_password"].encode("utf-8")):
             # JWT토큰 생성
             access_token = self._token.create_access_token(data={"sub": response_user["user_id"]}, conf=self._config)
+            # 레디스에 유저정보 저장
+            await self._redis.client.set(
+                name=f"cahce_user_info_{response_user['user_id']}",
+                value=str(
+                    {
+                        "user_id": response_user["user_id"],
+                        "user_name": response_user["user_name"],
+                        "user_email": response_user["user_email"],
+                        "access_token": access_token,
+                    }
+                ),
+                ex=self._redis.redis_expire_time,
+            )
             return {"access_token": access_token, "token_type": "bearer"}
         else:
             return JSONResponse(status_code=400, content=dict(msg="비밀번호가 일치하지 않습니다.", code="400"))

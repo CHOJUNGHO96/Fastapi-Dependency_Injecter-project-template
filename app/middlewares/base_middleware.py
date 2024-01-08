@@ -79,11 +79,9 @@ async def base_control_middlewares(request: Request, call_next):
                 raise ex.InvalidJwtToken()
 
             # 레디스에서 유저정보 가져오기
-            user_info = redis.get_user_cahce(user_id=user_id)
+            user_info = await redis.get_user_cahce(user_id=user_id)
 
-            if user_info:
-                request.state.user = user_info
-            else:
+            if not user_info:
                 raise NotFoundUserEx
 
         else:
