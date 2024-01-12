@@ -1,9 +1,8 @@
 import bcrypt
-from starlette.datastructures import State
 
 from app.apis.v1.auth.registration.repositories.registration_repositories import \
     RegistrationRepository
-from app.models.user import UserRegister
+from app.models.user import ModelUserRegister
 from app.util.token import Token
 
 
@@ -13,7 +12,7 @@ class RegistrationService:
         self._config = config
         self._token = token
 
-    async def post_register_service(self, user_info: UserRegister):
+    async def post_register_service(self, user_info: ModelUserRegister):
         """
         회원가입 Service
         :param user_info: 유저정보

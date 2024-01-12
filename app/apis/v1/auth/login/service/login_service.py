@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from app.apis.v1.auth.login.repositories.login_repositories import \
     LoginRepository
 from app.database.redis_config import RedisConfig
-from app.models.user import UserBase
+from app.models.user import ModelUserBase
 from app.util.token import Token
 
 
@@ -17,7 +17,7 @@ class LoginService:
         self._token = token
         self._redis = redis
 
-    async def post_login_service(self, user_info: UserBase):
+    async def post_login_service(self, user_info: ModelUserBase):
         """
         로그인 Service
         :param user_info: 유저정보

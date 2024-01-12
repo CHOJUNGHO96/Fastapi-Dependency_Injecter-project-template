@@ -4,15 +4,15 @@ from fastapi import APIRouter, Depends
 from app.apis.v1.auth.registration.containers import Container
 from app.apis.v1.auth.registration.service.registration_service import \
     RegistrationService
-from app.models.user import Token, UserRegister
+from app.models.user import ModelToken, ModelUserRegister
 
 router = APIRouter()
 
 
-@router.post("/register", response_model=Token)
+@router.post("/register", response_model=ModelToken)
 @inject
 async def post_registration(
-    user_info: UserRegister,
+    user_info: ModelUserRegister,
     registration_service: RegistrationService = Depends(Provide[Container.registration_service]),
 ):
     """

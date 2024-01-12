@@ -3,14 +3,14 @@ from fastapi.responses import JSONResponse
 from sqlalchemy.orm import Session
 
 from app.database.conn import Database as db
-from app.models.news import NewsBase
+from app.models.news import ModelNewsBase
 
 from .service.news_service import get_news_detail_service
 
 router = APIRouter()
 
 
-@router.get("/detail", response_model=NewsBase)
+@router.get("/detail", response_model=ModelNewsBase)
 async def get_news_detail_resources(
     article_id: int,
     session: Session = Depends(db.session),

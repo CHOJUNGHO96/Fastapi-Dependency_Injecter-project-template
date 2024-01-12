@@ -1,26 +1,26 @@
 from pydantic import BaseModel
 
 
-class UserBase(BaseModel):
+class ModelUserBase(BaseModel):
     user_id: str
     user_password: str
     user_email: str | None = None
     user_name: str | None = None
 
 
-class UserRegister(UserBase):
+class ModelUserRegister(ModelUserBase):
     user_email: str
     user_name: str
 
 
-class UserInDB(UserBase):
+class ModelUserInDB(ModelUserBase):
     hashed_password: str
 
 
-class Token(BaseModel):
+class ModelToken(BaseModel):
     access_token: str
     token_type: str
 
 
-class TokenData(BaseModel):
+class ModelTokenData(BaseModel):
     user_id: str | None = None

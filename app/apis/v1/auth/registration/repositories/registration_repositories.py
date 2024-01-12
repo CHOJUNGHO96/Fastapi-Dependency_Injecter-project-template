@@ -7,14 +7,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.schema.user import User
 from app.errors import exceptions as ex
-from app.models.user import UserRegister
+from app.models.user import ModelUserRegister
 
 
 class RegistrationRepository:
     def __init__(self, session_factory: Callable[..., AbstractAsyncContextManager[AsyncSession]]) -> None:
         self.session_factory = session_factory
 
-    async def post_register_repository(self, user_info: UserRegister) -> str | None:
+    async def post_register_repository(self, user_info: ModelUserRegister) -> str | None:
         """
         회원가입 Repository
         :param user_info: 유저정보
@@ -29,7 +29,7 @@ class RegistrationRepository:
         except SQLAlchemyError as e:
             raise ex.InternalQuerryEx(ex=e)
 
-    async def check_user(self, user_info: UserRegister):
+    async def check_user(self, user_info: ModelUserRegister):
         """
         아이디, 이메일 중복체크 Repository
         :param user_info: 유저정보

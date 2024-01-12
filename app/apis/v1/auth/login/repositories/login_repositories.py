@@ -7,14 +7,14 @@ from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.schema.user import User
 from app.errors import exceptions as ex
-from app.models.user import UserBase
+from app.models.user import ModelUserBase
 
 
 class LoginRepository:
     def __init__(self, session_factory: Callable[..., AbstractAsyncContextManager[AsyncSession]]) -> None:
         self.session_factory = session_factory
 
-    async def post_login_repository(self, user_info: UserBase) -> dict | None:
+    async def post_login_repository(self, user_info: ModelUserBase) -> dict | None:
         """
         로그인 Repository
         :param user_info: 유저정보

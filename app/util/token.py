@@ -6,7 +6,7 @@ from fastapi.security import OAuth2PasswordBearer
 from jose import JWTError, jwt
 from passlib.context import CryptContext
 
-from app.models.user import TokenData, UserBase, UserInDB
+from app.models.user import ModelTokenData, ModelUserBase, ModelUserInDB
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
@@ -23,7 +23,7 @@ def get_password_hash(password):
 def get_user(db, user_id: str):
     if user_id in db:
         user_dict = db[user_id]
-        return UserInDB(**user_dict)
+        return ModelUserInDB(**user_dict)
 
 
 def authenticate_user(fake_db, user_id: str, password: str):
@@ -35,7 +35,7 @@ def authenticate_user(fake_db, user_id: str, password: str):
     return user
 
 
-async def get_current_user(user: UserBase, conf: dict, token: Annotated[str, Depends(oauth2_scheme)]):
+async def get_current_user(user: ModelUserBase, conf: dict, token: Annotated[str, Depends(oauth2_scheme)]):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -49,7 +49,7 @@ async def get_current_user(user: UserBase, conf: dict, token: Annotated[str, Dep
         user_id: Optional[str] = payload_sub if payload_sub is not None else payload_user_id
         if user_id is None:
             raise credentials_exception
-        token_data = TokenData(user_id=user_id)
+        token_data = ModelTokenData(user_id=user_id)
     except JWTError:
         raise credentials_exception
     if token_data.user_id is not None:
@@ -61,7 +61,7 @@ async def get_current_user(user: UserBase, conf: dict, token: Annotated[str, Dep
 
 class Token:
     @classmethod
-    async def get_current_active_user(cls, current_user: Annotated[UserBase, Depends(get_current_user)]):
+    async def get_current_active_user(cls, current_user: Annotated[ModelUserBase, Depends(get_current_user)]):
         if current_user.disabled:
             raise HTTPException(status_code=400, detail="Inactive user")
         return current_user
