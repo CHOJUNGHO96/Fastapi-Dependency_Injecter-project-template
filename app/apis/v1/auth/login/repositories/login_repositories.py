@@ -23,7 +23,7 @@ class LoginRepository:
             async with self.session_factory() as session:
                 result = await session.scalars(select(User).where(User.user_id == user_info.user_id))
                 user = result.first()
-                if user is None:
+                if not user:
                     return None
                 return {
                     "user_password": user.user_password,

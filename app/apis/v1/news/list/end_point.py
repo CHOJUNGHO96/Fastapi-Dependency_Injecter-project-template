@@ -22,5 +22,5 @@ async def get_news_list_resources(
     return (
         JSONResponse(content={"list": response})
         if response
-        else JSONResponse(status_code=404, content={"message": "news Not Found", "code": "404"})
+        else JSONResponse(content={"message": "news Not Found", "code": "200"})
     )

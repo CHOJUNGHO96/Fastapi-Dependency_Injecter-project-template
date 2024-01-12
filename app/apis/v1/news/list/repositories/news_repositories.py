@@ -13,7 +13,7 @@ class NewsListRepository:
     def __init__(self, session_factory: Callable[..., AbstractAsyncContextManager[AsyncSession]]) -> None:
         self.session_factory = session_factory
 
-    async def get_news_list_repository(self) -> list[dict] | None:
+    async def get_news_list_repository(self) -> list[dict] | list:
         """
         뉴스 리스트 Repository
         """
@@ -21,8 +21,8 @@ class NewsListRepository:
             async with self.session_factory() as session:
                 result = await session.scalars(select(News))
                 news_list = result.all()
-                if news_list is None:
-                    return None
+                if not news_list:
+                    return []
                 return [
                     {
                         "article_id": news.article_id,

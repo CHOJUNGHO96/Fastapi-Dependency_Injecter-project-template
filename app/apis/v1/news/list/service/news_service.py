@@ -6,7 +6,7 @@ class NewsListService:
     def __init__(self, news_list_repository: NewsListRepository) -> None:
         self._repository: NewsListRepository = news_list_repository
 
-    async def get_news_list_service(self) -> list[dict] | None:
+    async def get_news_list_service(self) -> list[dict] | list:
         """
         뉴스 리스트  Service
         """
