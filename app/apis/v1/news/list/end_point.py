@@ -17,7 +17,7 @@ async def get_news_list_resources(
     news_list_service: NewsListService = Depends(Provide[Container.news_list_service]),
 ):
     """
-    `뉴스 리스트 조회`\n
+    `뉴스 리스트 조회`
     """
     response = await news_list_service.get_news_list_service()
     return (
@@ -34,7 +34,7 @@ async def post_news_list_resources(
     news_list_service: NewsListService = Depends(Provide[Container.news_list_service]),
 ):
     """
-    `뉴스 리스트 등록`\n
+    `뉴스 리스트 등록`
     """
     response = await news_list_service.post_news_list_service(news_info)
     return (

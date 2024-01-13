@@ -16,7 +16,6 @@ async def post_login(
     login_service: LoginService = Depends(Provide[Container.login_service]),
 ):
     """
-    `로그인 API`\n
-    :param user_info: 유저정보\n
+    `로그인 API`
     """
     return await login_service.post_login_service(user_info)

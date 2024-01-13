@@ -16,7 +16,6 @@ async def post_registration(
     registration_service: RegistrationService = Depends(Provide[Container.registration_service]),
 ):
     """
-    `회원가입 API`\n
-    :param user_info: 유저정보\n
+    `회원가입 API`
     """
     return await registration_service.post_register_service(user_info)
