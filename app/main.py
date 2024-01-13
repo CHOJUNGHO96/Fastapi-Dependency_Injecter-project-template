@@ -4,7 +4,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.apis.v1.bridge_routes import api_router
-from app.common.config import get_config
 from app.containers import Container
 from app.middlewares.base_middleware import base_control_middlewares
 
