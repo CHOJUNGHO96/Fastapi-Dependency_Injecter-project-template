@@ -20,13 +20,12 @@ def create_app() -> FastAPI:
 
     _app.container = container
 
-    conf = get_config()
     # 미들웨어 정의
     _app.add_middleware(middleware_class=BaseHTTPMiddleware, dispatch=base_control_middlewares)
 
     _app.add_middleware(
         CORSMiddleware,
-        allow_origins=conf.ALLOW_SITE,
+        allow_origins=_app.container.config()["ALLOW_SITE"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
