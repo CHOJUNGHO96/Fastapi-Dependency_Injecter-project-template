@@ -18,6 +18,7 @@ class ModelUserInDB(ModelUserBase):
 
 
 class ModelToken(BaseModel):
+    user_number: int
     access_token: str
     token_type: str
 

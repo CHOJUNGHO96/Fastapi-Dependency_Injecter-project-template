@@ -21,7 +21,7 @@ async def delete_data(container: containers):
 
 
 @pytest.mark.asyncio
-async def test_post_registration(client: TestClient):
+async def test_registration(client: TestClient):
     await delete_data(client.app.container)
     response = client.post(
         url=f"auth/register",
@@ -38,7 +38,7 @@ async def test_post_registration(client: TestClient):
 
 
 @pytest.mark.asyncio
-async def test_post_login(client: TestClient):
+async def test_login(client: TestClient):
     response = client.post(
         url="auth/login",
         json={"user_id": "test", "user_password": "test123!"},
@@ -46,4 +46,5 @@ async def test_post_login(client: TestClient):
     response_body = response.json()
     assert response.status_code == 200
     assert "access_token" in response_body.keys()
+    client.app_state.update({"user_number": response_body["user_number"]})
     client.headers.update({"authorization": f"{response_body['access_token']}"})

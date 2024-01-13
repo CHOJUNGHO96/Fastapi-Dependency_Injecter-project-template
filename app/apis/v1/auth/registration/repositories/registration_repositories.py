@@ -14,7 +14,7 @@ class RegistrationRepository:
     def __init__(self, session_factory: Callable[..., AbstractAsyncContextManager[AsyncSession]]) -> None:
         self.session_factory = session_factory
 
-    async def post_register_repository(self, user_info: ModelUserRegister) -> str | None:
+    async def post_register_repository(self, user_info: ModelUserRegister) -> dict | None:
         """
         회원가입 Repository
         :param user_info: 유저정보
@@ -22,8 +22,8 @@ class RegistrationRepository:
         try:
             async with self.session_factory() as session:
                 if user := await session.scalars(insert(User).values(**user_info.dict()).returning(User)):
-                    user_id = user.first().user_id
-                    return user_id
+                    user_info = user.first()
+                    return {"user_id": user_info.user_id, "user_number": user_info.user_number}
                 else:
                     return None
         except SQLAlchemyError as e:

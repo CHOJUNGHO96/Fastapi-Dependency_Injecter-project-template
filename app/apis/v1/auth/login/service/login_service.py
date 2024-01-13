@@ -39,6 +39,7 @@ class LoginService:
                 name=f"cahce_user_info_{response_user['user_id']}",
                 value=str(
                     {
+                        "user_number": response_user["user_number"],
                         "user_id": response_user["user_id"],
                         "user_name": response_user["user_name"],
                         "user_email": response_user["user_email"],
@@ -47,6 +48,6 @@ class LoginService:
                 ),
                 ex=self._redis.redis_expire_time,
             )
-            return {"access_token": access_token, "token_type": "bearer"}
+            return {"access_token": access_token, "token_type": "bearer", "user_number": response_user["user_number"]}
         else:
             return JSONResponse(status_code=400, content=dict(msg="비밀번호가 일치하지 않습니다.", code="400"))

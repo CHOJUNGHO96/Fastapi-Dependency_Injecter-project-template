@@ -28,9 +28,9 @@ class RegistrationService:
         user_info.user_password = hashed_password.decode("utf-8")
 
         # 레파지토리 호출
-        user_id: str | None = await self._repository.post_register_repository(user_info)
+        user_info: dict | None = await self._repository.post_register_repository(user_info)
 
         # JWT토큰 생성
-        access_token = self._token.create_access_token(data={"sub": user_id}, conf=self._config)
+        access_token = self._token.create_access_token(data={"sub": user_info["user_id"]}, conf=self._config)
 
-        return {"access_token": access_token, "token_type": "bearer"}
+        return {"access_token": access_token, "token_type": "bearer", "user_number": user_info["user_number"]}

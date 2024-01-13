@@ -26,6 +26,7 @@ class LoginRepository:
                 if not user:
                     return None
                 return {
+                    "user_number": user.user_number,
                     "user_password": user.user_password,
                     "user_id": user.user_id,
                     "user_name": user.user_name,
