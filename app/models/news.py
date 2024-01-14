@@ -18,5 +18,9 @@ class ModelNewsRegister(BaseModel):
     user_number: int
 
 
-class ModelNewsRegisterResponse(BaseModel):
+class ModelNewsUpdate(ModelNewsBase):
+    article_id: int
+
+
+class ModelNewsCudResponse(BaseModel):
     article_id: int
