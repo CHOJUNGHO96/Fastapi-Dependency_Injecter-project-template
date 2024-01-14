@@ -3,7 +3,8 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
 from app.apis.v1.news.list.containers import Container
-from app.models.news import ModelNewsBase, ModelNewsRegister, ModelNewsCudResponse, ModelNewsUpdate
+from app.models.news import (ModelNewsBase, ModelNewsCudResponse,
+                             ModelNewsDelete, ModelNewsPut, ModelNewsRegister)
 
 from .service.news_service import NewsListService
 
@@ -47,7 +48,7 @@ async def post_news_list_resources(
 @router.put("/list", response_model=ModelNewsCudResponse)
 @inject
 async def put_news_list_resources(
-    news_info: ModelNewsUpdate,
+    news_info: ModelNewsPut,
     news_list_service: NewsListService = Depends(Provide[Container.news_list_service]),
 ):
     """
@@ -58,4 +59,21 @@ async def put_news_list_resources(
         JSONResponse(content={"list": response})
         if response
         else JSONResponse(status_code=404, content={"message": "Update Failed."})
+    )
+
+
+@router.delete("/list", response_model=ModelNewsCudResponse)
+@inject
+async def delete_news_list_resources(
+    news_info: ModelNewsDelete = Depends(ModelNewsDelete),
+    news_list_service: NewsListService = Depends(Provide[Container.news_list_service]),
+):
+    """
+    `뉴스 리스트 삭제`
+    """
+    response = await news_list_service.delete_news_list_service(news_info)
+    return (
+        JSONResponse(content={"list": response})
+        if response
+        else JSONResponse(status_code=404, content={"message": "Delete Failed."})
     )

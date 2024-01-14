@@ -1,13 +1,14 @@
 from contextlib import AbstractAsyncContextManager
 from typing import Callable
 
-from sqlalchemy import insert, select, update, delete
+from sqlalchemy import delete, insert, select, update
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from app.database.schema.news import News
 from app.errors import exceptions as ex
-from app.models.news import ModelNewsBase, ModelNewsRegister, ModelNewsUpdate
+from app.models.news import (ModelNewsBase, ModelNewsDelete, ModelNewsPut,
+                             ModelNewsRegister)
 
 
 class NewsListRepository:
@@ -72,7 +73,7 @@ class NewsListRepository:
         except SQLAlchemyError as e:
             raise ex.InternalQuerryEx(ex=e)
 
-    async def put_news_list_repository(self, news_info: ModelNewsUpdate) -> list[dict] | list:
+    async def put_news_list_repository(self, news_info: ModelNewsPut) -> list[dict] | list:
         """
         Put Repository
         """
@@ -81,6 +82,27 @@ class NewsListRepository:
                 values = {key: value for key, value in news_info.dict().items() if value}
                 if result := await session.scalars(
                     update(News).where(News.article_id == news_info.article_id).values(**values).returning(News)
+                ):
+                    news_list = result.all()
+                    return [
+                        {
+                            "article_id": news.article_id,
+                        }
+                        for news in news_list
+                    ]
+                else:
+                    return []
+        except SQLAlchemyError as e:
+            raise ex.InternalQuerryEx(ex=e)
+
+    async def delete_news_list_repository(self, news_info: ModelNewsDelete) -> list[dict] | list:
+        """
+        Delete Repository
+        """
+        try:
+            async with self.session_factory() as session:
+                if result := await session.scalars(
+                    delete(News).where(News.article_id == news_info.article_id).returning(News)
                 ):
                     news_list = result.all()
                     return [

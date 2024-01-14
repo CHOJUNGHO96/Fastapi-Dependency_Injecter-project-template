@@ -1,5 +1,7 @@
-from app.apis.v1.news.list.repositories.news_repositories import NewsListRepository
-from app.models.news import ModelNewsBase, ModelNewsRegister, ModelNewsUpdate
+from app.apis.v1.news.list.repositories.news_repositories import \
+    NewsListRepository
+from app.models.news import (ModelNewsBase, ModelNewsDelete, ModelNewsPut,
+                             ModelNewsRegister)
 
 
 class NewsListService:
@@ -28,11 +30,20 @@ class NewsListService:
         news_list: list[dict] | list = await self._repository.post_news_list_repository(news_info)
         return news_list
 
-    async def put_news_list_service(self, news_info: ModelNewsUpdate) -> list[dict] | list:
+    async def put_news_list_service(self, news_info: ModelNewsPut) -> list[dict] | list:
         """
         Put Service
         """
 
         # 레파지토리 호출
         news_list: list[dict] | list = await self._repository.put_news_list_repository(news_info)
+        return news_list
+
+    async def delete_news_list_service(self, news_info: ModelNewsDelete) -> list[dict] | list:
+        """
+        Put Service
+        """
+
+        # 레파지토리 호출
+        news_list: list[dict] | list = await self._repository.delete_news_list_repository(news_info)
         return news_list

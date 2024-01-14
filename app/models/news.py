@@ -18,7 +18,11 @@ class ModelNewsRegister(BaseModel):
     user_number: int
 
 
-class ModelNewsUpdate(ModelNewsBase):
+class ModelNewsPut(ModelNewsBase):
+    article_id: int
+
+
+class ModelNewsDelete(BaseModel):
     article_id: int
 
 
