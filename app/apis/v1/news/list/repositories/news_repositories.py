@@ -31,7 +31,7 @@ class NewsListRepository:
         """
         try:
             async with self.session_factory() as session:
-                conditions = await self.sqlalchemy_helper.filter(News, news_info)
+                conditions = await self.sqlalchemy_helper.get_news_list_filter(News, news_info)
                 result = await session.scalars(select(News).where(*conditions).order_by(News.article_id.desc()))
                 news_list = result.all()
                 if not news_list:

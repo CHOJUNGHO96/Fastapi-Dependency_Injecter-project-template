@@ -3,7 +3,7 @@ from app.models.news import ModelNewsBase
 
 
 class SqlalchemyHelper:
-    async def filter(self, news_schema: type[News], news_info: ModelNewsBase) -> list:
+    async def get_news_list_filter(self, news_schema: type[News], news_info: ModelNewsBase) -> list:
         """
         Filter
         """
