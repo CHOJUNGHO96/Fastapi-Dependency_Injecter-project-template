@@ -5,6 +5,7 @@ from sqlalchemy import delete, insert, select, update
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
 
+from app.apis.v1.news.list.sqlalchemy_helper import SqlalchemyHelper
 from app.database.schema.news import News
 from app.errors import exceptions as ex
 from app.models.news import (ModelNewsBase, ModelNewsDelete, ModelNewsPut,
@@ -16,8 +17,13 @@ class NewsListRepository:
     뉴스 리스트 Repository
     """
 
-    def __init__(self, session_factory: Callable[..., AbstractAsyncContextManager[AsyncSession]]) -> None:
+    def __init__(
+        self,
+        session_factory: Callable[..., AbstractAsyncContextManager[AsyncSession]],
+        sqlalchemy_helper: SqlalchemyHelper,
+    ) -> None:
         self.session_factory = session_factory
+        self.sqlalchemy_helper = sqlalchemy_helper
 
     async def get_news_list_repository(self, news_info: ModelNewsBase) -> list[dict] | list:
         """
@@ -25,17 +31,7 @@ class NewsListRepository:
         """
         try:
             async with self.session_factory() as session:
-                conditions = []
-                if news_info.article_id is not None:
-                    conditions.append(News.article_id == news_info.article_id)
-                if news_info.content is not None:
-                    conditions.append(News.content == news_info.content)
-                if news_info.source is not None:
-                    conditions.append(News.source == news_info.source)
-                if news_info.user_number is not None:
-                    conditions.append(News.user_number == news_info.user_number)
-                if news_info.url is not None:
-                    conditions.append(News.url == news_info.url)
+                conditions = await self.sqlalchemy_helper.filter(News, news_info)
                 result = await session.scalars(select(News).where(*conditions).order_by(News.article_id.desc()))
                 news_list = result.all()
                 if not news_list:
