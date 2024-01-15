@@ -41,7 +41,7 @@ class NewsListService:
 
     async def delete_news_list_service(self, news_info: ModelNewsDelete) -> list[dict] | list:
         """
-        Put Service
+        Delete Service
         """
 
         # 레파지토리 호출
