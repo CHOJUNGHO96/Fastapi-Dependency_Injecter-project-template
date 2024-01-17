@@ -1,0 +1,72 @@
+from contextlib import AbstractAsyncContextManager
+from typing import Callable
+
+from bs4 import BeautifulSoup
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
+from sqlalchemy import insert, select
+from sqlalchemy.ext.asyncio import AsyncSession
+from webdriver_manager.chrome import ChromeDriverManager
+
+from app.database.schema.news import News
+
+
+class NewsCrawling:
+    """
+    뉴스 크롤링
+    """
+
+    def __init__(self, session_factory: Callable[..., AbstractAsyncContextManager[AsyncSession]]) -> None:
+        self.session_factory = session_factory
+
+    async def get_news_crawling_to_insert(self) -> list[dict] | list:
+        """
+        뉴스 크롤링해와서 DB에 INSERT 해주는 함수
+        """
+
+        async with self.session_factory() as session:
+            get_last_news = await session.scalars(select(News).order_by(News.article_id.desc()).limit(1))
+            if get_last_news:
+                url_id = int(get_last_news.first().url.split("=")[-1])
+            else:
+                url_id = 264834
+
+        # selenium 설정
+        chrome_options = Options()
+        chrome_options.add_argument("--headless")  # headless 모드 활성화
+        service = Service(ChromeDriverManager().install())
+
+        insert_target = []
+        for _url_id in range(url_id + 1, url_id + 4):
+            driver = webdriver.Chrome(service=service, options=chrome_options)
+
+            # 크롤링할 페이지 접속
+            url = f"https://www.arirang.com/news/view/?id={str(_url_id)}"
+            driver.get(url)
+
+            # 페이지의 소스 가져오기
+            html = driver.page_source
+            soup = BeautifulSoup(html, "html.parser")
+
+            # title 추출
+            title = soup.find("div", class_="title").get_text(strip=True)
+
+            # content 추출
+            content_paragraphs = soup.find_all("p", class_="text")
+            content = " ".join(p.get_text(strip=True) for p in content_paragraphs)
+
+            # 브라우저 닫기
+            driver.quit()
+            insert_target.append({"title": title, "content": content, "url": url, "source": "아리랑TV", "user_number": 1})
+        async with self.session_factory() as session:
+            if result := await session.execute(insert(News).values(insert_target).returning(News)):
+                news_list = result.all()
+                return [
+                    {
+                        "article_id": news[0].article_id,
+                    }
+                    for news in news_list
+                ]
+            else:
+                return []
