@@ -11,14 +11,21 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 from app.database.schema.news import News
 
+import pika
+
 
 class NewsCrawling:
     """
     뉴스 크롤링
     """
 
-    def __init__(self, session_factory: Callable[..., AbstractAsyncContextManager[AsyncSession]]) -> None:
+    def __init__(
+        self,
+        session_factory: Callable[..., AbstractAsyncContextManager[AsyncSession]],
+        rabbitmq_connection: pika.BlockingConnection,
+    ) -> None:
         self.session_factory = session_factory
+        self.rabbitmq_connection = rabbitmq_connection
 
     async def get_news_crawling_to_insert(self) -> list[dict] | list:
         """
@@ -70,3 +77,12 @@ class NewsCrawling:
                 ]
             else:
                 return []
+
+    def publish_message(
+        self,
+        message: str,
+    ):
+        channel = self.rabbitmq_connection.channel()
+        channel.queue_declare(queue="mail")
+        channel.basic_publish(exchange="", routing_key="mail", body=message)
+        return {"message": "전송완료"}

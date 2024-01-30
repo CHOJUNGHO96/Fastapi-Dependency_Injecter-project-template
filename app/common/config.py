@@ -32,6 +32,12 @@ class MainConfig(BaseSettings):
     REDIS_PASSWORD: str
     REDIS_EXPIRE_TIME: int = 86400
 
+    # RABBITMQ
+    RABBITMQ_HOST: str
+    RABBITMQ_PORT: int
+    RABBITMQ_ID: str
+    RABBITMQ_PASSWORD: str
+
     # TDD
     TEST_MODE: bool = False
     # TEST_DB_URL: str
