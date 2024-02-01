@@ -1,6 +1,7 @@
 from contextlib import AbstractAsyncContextManager
 from typing import Callable
 
+import pika
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
@@ -10,8 +11,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from webdriver_manager.chrome import ChromeDriverManager
 
 from app.database.schema.news import News
-
-import pika
 
 
 class NewsCrawling:

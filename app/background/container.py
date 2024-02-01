@@ -1,10 +1,10 @@
+import pika
 from celery import Celery
 from dependency_injector import containers, providers
 
 from app.background.job.news_crawling import NewsCrawling
 from app.common.config import get_config
 from app.database.conn import Database
-import pika
 
 
 class Container(containers.DeclarativeContainer):
@@ -23,7 +23,7 @@ class Container(containers.DeclarativeContainer):
         imports=["background.run"],
     )
 
-    # # rabbitmq 인스턴스 의존성 주입
+    # rabbitmq 인스턴스 의존성 주입
     rabbitmq_connection = providers.Singleton(
         pika.BlockingConnection,
         pika.ConnectionParameters(

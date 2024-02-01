@@ -39,17 +39,3 @@ class RedisConfig:
             return cahce_user
         else:
             return None
-
-    # def get_global_config(self) -> str:
-    #     """
-    #     전역설정값을 Redis에 저장
-    #     """
-    #     redis = self.redis
-    #     global_config = redis.get("global_config")
-    #     _global_config_data = GlobalConfig.filter(is_enable=1).all()
-    #     global_config_data = json.dumps({data.parameter: data.value for data in _global_config_data})
-    #     if global_config is None:
-    #         redis.set(name="global_config", value=str(global_config_data), ex=self.redis_expire_time)
-    #         global_config = redis.get("global_config")
-    #     global_config = global_config.decode()
-    #     return global_config
