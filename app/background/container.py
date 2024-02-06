@@ -23,17 +23,5 @@ class Container(containers.DeclarativeContainer):
         imports=["background.run"],
     )
 
-    # rabbitmq 인스턴스 의존성 주입
-    rabbitmq_connection = providers.Singleton(
-        pika.BlockingConnection,
-        pika.ConnectionParameters(
-            host=conf["RABBITMQ_HOST"],
-            port=conf["RABBITMQ_PORT"],
-            credentials=pika.PlainCredentials(conf["RABBITMQ_ID"], conf["RABBITMQ_PASSWORD"]),
-        ),
-    )
-
     # news_crawling
-    celery_news_crawling = providers.Singleton(
-        NewsCrawling, session_factory=db.provided.session, rabbitmq_connection=rabbitmq_connection
-    )
+    celery_news_crawling = providers.Singleton(NewsCrawling, session_factory=db.provided.session)

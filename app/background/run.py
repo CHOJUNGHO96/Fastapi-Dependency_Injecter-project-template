@@ -1,5 +1,4 @@
 import asyncio
-
 from app.background.container import Container as BackgroundContainer
 
 container = BackgroundContainer()
