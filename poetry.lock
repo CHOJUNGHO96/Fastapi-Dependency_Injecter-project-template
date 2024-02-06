@@ -827,26 +827,6 @@ gmpy = ["gmpy"]
 gmpy2 = ["gmpy2"]
 
 [[package]]
-name = "fakeredis"
-version = "2.20.1"
-description = "Python implementation of redis API, can be used for testing purposes."
-optional = false
-python-versions = ">=3.7,<4.0"
-files = [
-    {file = "fakeredis-2.20.1-py3-none-any.whl", hash = "sha256:d1cb22ed76b574cbf807c2987ea82fc0bd3e7d68a7a1e3331dd202cc39d6b4e5"},
-    {file = "fakeredis-2.20.1.tar.gz", hash = "sha256:a2a5ccfcd72dc90435c18cde284f8cdd0cb032eb67d59f3fed907cde1cbffbbd"},
-]
-
-[package.dependencies]
-redis = ">=4"
-sortedcontainers = ">=2,<3"
-
-[package.extras]
-bf = ["pybloom-live (>=4.0,<5.0)"]
-json = ["jsonpath-ng (>=1.6,<2.0)"]
-lua = ["lupa (>=1.14,<3.0)"]
-
-[[package]]
 name = "fastapi"
 version = "0.101.1"
 description = "FastAPI framework, high performance, easy to learn, fast to code, ready for production"
@@ -2803,4 +2783,4 @@ multidict = ">=4.0"
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "9183c1cc89b278326f123fac2d34865ac8e87b48fc2edb88744f019310901769"
+content-hash = "4f0662883b44d3f9259547f1f1363f5fa5061db6726acd0e8e723a10c9f1cc08"
