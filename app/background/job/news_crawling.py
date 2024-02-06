@@ -76,12 +76,3 @@ class NewsCrawling:
                 ]
             else:
                 return []
-
-    def publish_message(
-        self,
-        message: str,
-    ):
-        channel = self.rabbitmq_connection.channel()
-        channel.queue_declare(queue="mail")
-        channel.basic_publish(exchange="", routing_key="mail", body=message)
-        return {"message": "전송완료"}
