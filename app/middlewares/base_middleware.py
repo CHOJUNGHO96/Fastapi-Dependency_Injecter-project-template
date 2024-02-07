@@ -72,7 +72,7 @@ async def base_control_middlewares(request: Request, call_next):
             else:
                 token = str(headers.get("authorization"))
 
-            # 들어온 토큰 유효성 검사
+            # 들어온 토큰으로 user_id 유효성 검사
             await get_current_user(conf=config, redis=redis, token=token)
         else:
             raise NotAuthorization()
