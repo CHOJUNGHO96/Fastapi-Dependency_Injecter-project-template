@@ -5,17 +5,18 @@ from typing import Optional
 import sqlalchemy.exc
 from dependency_injector import containers
 from fastapi import HTTPException
-from jose import jwt, JWTError
+from jose import JWTError, jwt
 from starlette import status
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.common.config import get_config
 from app.database.redis_config import RedisConfig
-from app.errors.exceptions import APIException, InternalSqlEx, NotFoundUserEx, NotAuthorization
+from app.errors.exceptions import (APIException, InternalSqlEx,
+                                   NotAuthorization, NotFoundUserEx)
+from app.models.user import ModelTokenData
 from app.util.date_utils import D
 from app.util.logger import LogAdapter
-from app.models.user import ModelTokenData
 
 
 async def base_control_middlewares(request: Request, call_next):
