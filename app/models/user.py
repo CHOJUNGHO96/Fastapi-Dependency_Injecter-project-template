@@ -25,3 +25,4 @@ class ModelToken(BaseModel):
 
 class ModelTokenData(BaseModel):
     user_id: str | None = None
+    token: str | None = None

@@ -1,18 +1,21 @@
 import re
 import time
+from typing import Optional
 
 import sqlalchemy.exc
 from dependency_injector import containers
-from jose import jwt
+from fastapi import HTTPException
+from jose import jwt, JWTError
+from starlette import status
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.common.config import get_config
 from app.database.redis_config import RedisConfig
-from app.errors import exceptions as ex
-from app.errors.exceptions import APIException, InternalSqlEx, NotFoundUserEx
+from app.errors.exceptions import APIException, InternalSqlEx, NotFoundUserEx, NotAuthorization
 from app.util.date_utils import D
 from app.util.logger import LogAdapter
+from app.models.user import ModelTokenData
 
 
 async def base_control_middlewares(request: Request, call_next):
@@ -61,31 +64,17 @@ async def base_control_middlewares(request: Request, call_next):
 
     # 토큰검증후 HTTP 요청처리
     try:
-        # /api/v1/service 로 오는 요청은 토큰검사를 해야함
+        # 로그인 인증후 들어오는 요청은 토큰검사를 해야함
         if "authorization" in headers.keys():
             if "Bearer" in str(headers.get("authorization")):
                 token = str(headers.get("authorization")).replace("Bearer ", "")
             else:
                 token = str(headers.get("authorization"))
 
-            # 들어온 토큰 디코드후 유저정보 가져오기
-            payload = jwt.decode(
-                token,
-                config["JWT_SECRET_KEY"],
-                algorithms=config["JWT_ALGORITHM"],
-            )
-            user_id: str = str(payload.get("sub"))
-            if user_id is None:
-                raise ex.InvalidJwtToken()
-
-            # 레디스에서 유저정보 가져오기
-            user_info = await redis.get_user_cahce(user_id=user_id)
-
-            if not user_info:
-                raise NotFoundUserEx
-
+            # 들어온 토큰 유효성 검사
+            await get_current_user(conf=config, redis=redis, token=token)
         else:
-            raise ex.NotAuthorization()
+            raise NotAuthorization()
         return await call_next(request)
     except Exception as e:
         error = await exception_handler(e)
@@ -109,3 +98,30 @@ async def exception_handler(error: Exception):
     if not isinstance(error, APIException):
         error = APIException(ex=error)
     return error
+
+
+async def get_current_user(conf: get_config(), redis: RedisConfig, token: str):
+    credentials_exception = HTTPException(
+        status_code=status.HTTP_401_UNAUTHORIZED,
+        detail="Could not validate credentials",
+        headers={"WWW-Authenticate": "Bearer"},
+    )
+    try:
+        payload = jwt.decode(token, conf["JWT_SECRET_KEY"], algorithms=conf["JWT_ALGORITHM"])
+        # user_id 추출
+        payload_sub = payload.get("sub")
+        payload_user_id = payload.get("user_id")
+        user_id: Optional[str] = payload_sub if payload_sub is not None else payload_user_id
+        if user_id is None:
+            raise credentials_exception
+        token_data = ModelTokenData(user_id=user_id, token=token)
+    except JWTError:
+        raise credentials_exception
+    if token_data.user_id is not None:
+        # 레디스에서 유저정보 가져오기
+        user_info = await redis.get_user_cahce(user_id=user_id)
+        if not user_info:
+            raise NotFoundUserEx()
+        return True
+    else:
+        raise NotAuthorization()
