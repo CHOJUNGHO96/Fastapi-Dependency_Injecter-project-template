@@ -9,7 +9,7 @@ class Container(containers.DeclarativeContainer):
     db = providers.Singleton()
     config = providers.Configuration()
     token = providers.Singleton()
-    redis = providers.Singleton()
+    redis = providers.Resource()
 
     wiring_config = containers.WiringConfiguration(packages=["app.apis.v1.auth.login"])
 

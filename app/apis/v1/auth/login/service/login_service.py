@@ -5,17 +5,17 @@ from fastapi.responses import JSONResponse
 
 from app.apis.v1.auth.login.repositories.login_repositories import \
     LoginRepository
-from app.database.redis_config import RedisConfig
+from app.database.redis_config import init_redis_pool
 from app.models.user import ModelUserBase
 from app.util.token import Token
 
 
 class LoginService:
-    def __init__(self, login_repository: LoginRepository, config: dict, token: Token, redis: RedisConfig) -> None:
+    def __init__(self, login_repository: LoginRepository, config: dict, token: Token, redis: init_redis_pool) -> None:
         self._repository: LoginRepository = login_repository
         self._config = config
         self._token = token
-        self._redis = redis
+        self.redis = redis
 
     async def post_login_service(self, user_info: ModelUserBase):
         """
@@ -31,11 +31,11 @@ class LoginService:
         if response_user is None:
             return JSONResponse(status_code=400, content=dict(msg="아이디가 존재하지 않습니다.", code="400"))
 
-        if bcrypt.checkpw(password.encode("utf-8"), response_user["user_password"].encode("utf-8")):
+        if bcrypt.checkpw(password.encode(), response_user["user_password"].encode("utf-8")):
             # JWT토큰 생성
             access_token = self._token.create_access_token(data={"sub": response_user["user_id"]}, conf=self._config)
             # 레디스에 유저정보 저장
-            await self._redis.client.set(
+            await self.redis.set(
                 name=f"cahce_user_info_{response_user['user_id']}",
                 value=str(
                     {
@@ -46,7 +46,7 @@ class LoginService:
                         "access_token": access_token,
                     }
                 ),
-                ex=self._redis.redis_expire_time,
+                ex=self._config.get("REDIS_EXPIRE_TIME", 86400),
             )
             return {"access_token": access_token, "token_type": "bearer", "user_number": response_user["user_number"]}
         else:

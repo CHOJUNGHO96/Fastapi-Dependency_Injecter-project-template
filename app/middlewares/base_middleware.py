@@ -11,7 +11,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.common.config import get_config
-from app.database.redis_config import RedisConfig
+from app.database.redis_config import get_user_cahce, init_redis_pool
 from app.errors.exceptions import (APIException, InternalSqlEx,
                                    NotAuthorization, NotFoundUserEx)
 from app.models.user import ModelTokenData
@@ -24,17 +24,10 @@ async def base_control_middlewares(request: Request, call_next):
     베이스 미들웨어
     이 함수는 모든 HTTP 요청에 대해 호출됩니다.
     여기에는 요청 로깅, 토큰 검증, 에러 처리 등이 포함됩니다.
-
-    :param request: `들어오는 HTTP 요청을 나타냅니다.\n
-    Request 객체는 요청 헤더, 경로, 쿼리 파라미터 등 요청과 관련된 다양한 정보를 담고 있습니다.`
-
-    :param call_next: `다음 미들웨어 또는 실제 요청을 처리하는 경로 작업을 호출하는 함수입니다.\n
-    이 함수를 호출하면 요청이 다음 단계로 전달되며, 결과로 나오는 응답(Response 객체)을 받을 수 있습니다.`
     """
     container: containers = request.app.container
     config: get_config = container.config()
     logger: LogAdapter = container.logging()
-    redis: RedisConfig = container.redis()
 
     request.state.req_time = D.datetime()
     request.state.start = time.time()
@@ -73,7 +66,7 @@ async def base_control_middlewares(request: Request, call_next):
                 token = str(headers.get("authorization"))
 
             # 들어온 토큰으로 user_id 유효성 검사
-            await get_current_user(conf=config, redis=redis, token=token)
+            await get_current_user(conf=config, token=token)
         else:
             raise NotAuthorization()
         return await call_next(request)
@@ -101,7 +94,7 @@ async def exception_handler(error: Exception):
     return error
 
 
-async def get_current_user(conf: get_config(), redis: RedisConfig, token: str):
+async def get_current_user(conf: get_config(), token: str):
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
         detail="Could not validate credentials",
@@ -120,7 +113,7 @@ async def get_current_user(conf: get_config(), redis: RedisConfig, token: str):
         raise credentials_exception
     if token_data.user_id is not None:
         # 레디스에서 유저정보 가져오기
-        user_info = await redis.get_user_cahce(user_id=user_id)
+        user_info = await get_user_cahce(user_id=user_id, conf=conf)
         if not user_info:
             raise NotFoundUserEx()
         return True

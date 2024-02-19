@@ -1,41 +1,42 @@
 import json
+from typing import AsyncIterator
 
+from common.config import get_config
+from dependency_injector.wiring import Provide, inject
 from redis import asyncio as aioredis
 
-# from app.database.schema.global_config import GlobalConfig
+
+async def init_redis_pool(conf: get_config) -> AsyncIterator[aioredis.Redis]:
+    session = aioredis.from_url(
+        f"redis://{str(conf.get('REDIS_HOST', ''))}",
+        port=int(str(conf.get("REDIS_PORT", 6379))),
+        password=str(conf.get("REDIS_PASSWORD")),
+    )
+    yield session
+    await session.close()
 
 
-class RedisConfig:
+@inject
+async def get_user_cahce(user_id: str, conf: get_config, redis=Provide["redis"]) -> str | None:
     """
-    Redis 설정
+    유저정보 캐시로 관리
     """
-
-    def __init__(self, conf: dict):
-        self.redis_expire_time = int(str(conf.get("REDIS_EXPIRE_TIME", 900)))
-        self.client = aioredis.Redis(
-            host=str(conf.get("REDIS_HOST", "")),
-            port=int(str(conf.get("REDIS_PORT", 6379))),
-            password=str(conf.get("REDIS_PASSWORD")),
-        )
-
-    async def get_user_cahce(self, user_id: str) -> str | None:
-        """
-        유저정보 캐시로 관리
-        """
-        if self.client is None:
+    try:
+        if redis is None:
             raise ValueError("Redis 인스턴스가 초기화되지 않았습니다.")
-        cahce_user = await self.client.get(f"cahce_user_info_{user_id}")
-
+        cahce_user = await redis.get(f"cahce_user_info_{user_id}")
         if cahce_user is None:
-            await self.client.set(
+            await redis.set(
                 name=f"cahce_user_info_{user_id}",
                 value=str(json.dumps(cahce_user)),
-                ex=self.redis_expire_time,
+                ex=conf["redis_expire_time"],
             )
-            cahce_user = await self.client.get(f"cahce_user_info_{user_id}")
-
+            cahce_user = await redis.get(f"cahce_user_info_{user_id}")
         if isinstance(cahce_user, bytes):
             cahce_user = cahce_user.decode()
             return cahce_user
         else:
             return None
+    except Exception as e:
+        print(e)
+        return None
