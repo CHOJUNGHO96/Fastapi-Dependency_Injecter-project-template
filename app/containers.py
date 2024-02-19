@@ -10,7 +10,6 @@ from app.background.container import Container as BackgroundContainer
 from app.common.config import get_config
 from app.database.conn import Database
 from app.database.redis_config import init_redis_pool
-from app.middlewares.base_middleware import base_control_middlewares
 from app.util.logger import LogAdapter
 from app.util.token import Token
 
