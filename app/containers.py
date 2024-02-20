@@ -1,5 +1,6 @@
 from celery import Celery
 from dependency_injector import containers, providers
+from fakeredis import FakeStrictRedis
 from fastapi.requests import Request
 
 from app.apis.v1.auth.login.containers import Container as LoginContainer

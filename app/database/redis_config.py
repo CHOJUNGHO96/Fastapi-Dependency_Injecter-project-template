@@ -1,17 +1,21 @@
 import json
 from typing import AsyncIterator
 
+import fakeredis.aioredis
 from common.config import get_config
 from dependency_injector.wiring import Provide, inject
 from redis import asyncio as aioredis
 
 
 async def init_redis_pool(conf: get_config) -> AsyncIterator[aioredis.Redis]:
-    session = aioredis.from_url(
-        f"redis://{str(conf.get('REDIS_HOST', ''))}",
-        port=int(str(conf.get("REDIS_PORT", 6379))),
-        password=str(conf.get("REDIS_PASSWORD")),
-    )
+    if conf["TEST_MODE"]:
+        session = await fakeredis.aioredis.FakeRedis()
+    else:
+        session = aioredis.from_url(
+            f"redis://{str(conf.get('REDIS_HOST', ''))}",
+            port=int(str(conf.get("REDIS_PORT", 6379))),
+            password=str(conf.get("REDIS_PASSWORD")),
+        )
     yield session
     await session.close()
 
