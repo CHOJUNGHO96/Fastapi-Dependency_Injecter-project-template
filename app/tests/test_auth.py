@@ -34,7 +34,7 @@ async def test_registration(client: TestClient):
     )
     response_body = response.json()
     assert response.status_code == 200
-    assert "access_token" in response_body.keys()
+    assert response_body["msg"] == "회원가입 성공"
 
 
 @pytest.mark.asyncio

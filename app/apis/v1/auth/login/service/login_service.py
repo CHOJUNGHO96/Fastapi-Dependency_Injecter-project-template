@@ -33,8 +33,11 @@ class LoginService:
         # 비밀번호 체크
         if self.authentication.verify_password(password, response_user["user_password"].encode("utf-8")):
             # JWT토큰 생성
-            access_token = self.authentication.create_jwt_access_token(
-                data={"sub": response_user["user_id"]}, conf=self._config
+            access_token = self.authentication.create_jwt_token(
+                data={"sub": response_user["user_id"]}, conf=self._config, token_type="ACCESS"
+            )
+            refresh_token = self.authentication.create_jwt_token(
+                data={"sub": response_user["user_id"]}, conf=self._config, token_type="REFRESH"
             )
             # 레디스에 유저정보 저장
             await self.redis.set(
@@ -46,15 +49,17 @@ class LoginService:
                         "user_name": response_user["user_name"],
                         "user_email": response_user["user_email"],
                         "access_token": access_token,
+                        "refresh_token": refresh_token,
                     }
                 ),
-                ex=self._config.get("REDIS_EXPIRE_TIME", 86400),
+                ex=self._config.get("REDIS_EXPIRE_TIME", 604800),
             )
             return ModelTokenData(
                 user_id=response_user["user_id"],
                 user_number=response_user["user_number"],
                 token_type="bearer",
                 access_token=access_token,
+                refresh_token=refresh_token,
             )
         else:
             raise ex.BadPassword()

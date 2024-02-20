@@ -17,9 +17,11 @@ class MainConfig(BaseSettings):
     VERSION: str = "1.0.0"
 
     # JWT
-    JWT_SECRET_KEY: str
     JWT_ALGORITHM: str
-    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int
+    JWT_ACCESS_SECRET_KEY: str
+    JWT_ACCESS_TOKEN_EXPIRE_MINUTES: int = 15
+    JWT_REFRESH_SECRET_KEY: str
+    JWT_REFRESH_TOKEN_EXPIRE_MINUTES: int = 3000
 
     # DB
     DB_POOL_RECYCLE: int = 900

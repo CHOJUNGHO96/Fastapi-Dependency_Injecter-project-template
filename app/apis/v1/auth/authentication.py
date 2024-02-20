@@ -10,11 +10,11 @@ pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
 class Authentication:
     @classmethod
-    def create_jwt_access_token(cls, data: dict, conf: dict):
+    def create_jwt_token(cls, data: dict, conf: dict, token_type: str) -> str:
         to_encode = data.copy()
-        expire = datetime.utcnow() + timedelta(minutes=conf.get("JWT_ACCESS_TOKEN_EXPIRE_MINUTES", 15))
+        expire = datetime.utcnow() + timedelta(minutes=conf.get(f"JWT_{token_type}_TOKEN_EXPIRE_MINUTES"))
         to_encode.update({"exp": expire})
-        encoded_jwt = jwt.encode(to_encode, conf["JWT_SECRET_KEY"], algorithm=conf["JWT_ALGORITHM"])
+        encoded_jwt = jwt.encode(to_encode, conf[f"JWT_{token_type}_SECRET_KEY"], algorithm=conf["JWT_ALGORITHM"])
         return encoded_jwt
 
     @classmethod

@@ -22,4 +22,5 @@ async def post_login(
     user_data = await login_service.post_login_service(user_info)
     response.set_cookie("token_type", user_data.token_type)
     response.set_cookie("access_token", user_data.access_token)
+    response.set_cookie("refresh_token", user_data.refresh_token)
     return user_data

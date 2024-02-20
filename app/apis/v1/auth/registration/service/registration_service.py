@@ -1,9 +1,8 @@
 import bcrypt
 
 from app.apis.v1.auth.authentication import Authentication
-from app.apis.v1.auth.registration.repositories.registration_repositories import \
-    RegistrationRepository
-from app.models.user import ModelTokenData, ModelUserRegister
+from app.apis.v1.auth.registration.repositories.registration_repositories import RegistrationRepository
+from app.models.user import ModelUserRegister
 
 
 class RegistrationService:
@@ -14,7 +13,7 @@ class RegistrationService:
         self._config = config
         self.authentication = authentication
 
-    async def post_register_service(self, user_info: ModelUserRegister) -> ModelTokenData:
+    async def post_register_service(self, user_info: ModelUserRegister) -> bool:
         """
         회원가입 Service
         :param user_info: 유저정보
@@ -29,12 +28,4 @@ class RegistrationService:
         # 암호화된 비밀번호를 DB에 넣기위해 디코딩하여 다시 p["password"]에 저장
         user_info.user_password = hashed_password.decode("utf-8")
 
-        # 레파지토리 호출
-        user_info: dict | None = await self._repository.post_register_repository(user_info)
-
-        # JWT토큰 생성
-        access_token = self.authentication.create_jwt_access_token(
-            data={"sub": user_info["user_id"]}, conf=self._config
-        )
-
-        return ModelTokenData(user_id=user_info["user_id"], token_type="bearer", access_token=access_token)
+        return await self._repository.post_register_repository(user_info)
