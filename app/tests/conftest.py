@@ -1,4 +1,6 @@
+import asyncio
 import os
+from typing import Generator
 
 import pytest
 from fastapi import FastAPI
@@ -15,6 +17,13 @@ def app() -> FastAPI:
     from app.main import create_app
 
     yield create_app()
+
+
+@pytest.fixture(scope="session")
+def event_loop() -> Generator[asyncio.AbstractEventLoop, None, None]:
+    loop = asyncio.get_event_loop_policy().new_event_loop()
+    yield loop
+    loop.close()
 
 
 @pytest.fixture(scope="session")

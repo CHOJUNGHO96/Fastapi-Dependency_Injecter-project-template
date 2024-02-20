@@ -46,5 +46,5 @@ async def test_login(client: TestClient):
     response_body = response.json()
     assert response.status_code == 200
     assert "access_token" in response_body.keys()
-    client.app_state.update({"user_id": response_body["user_id"]})
+    client.app_state.update({"user_id": response_body["user_id"], "user_number": response_body["user_number"]})
     client.headers.update({"authorization": f"{response_body['access_token']}"})

@@ -51,6 +51,11 @@ class LoginService:
                 ),
                 ex=self._config.get("REDIS_EXPIRE_TIME", 86400),
             )
-            return ModelTokenData(user_id=response_user["user_id"], token_type="bearer", access_token=access_token)
+            return ModelTokenData(
+                user_id=response_user["user_id"],
+                user_number=response_user["user_number"],
+                token_type="bearer",
+                access_token=access_token,
+            )
         else:
             raise ex.BadPassword()

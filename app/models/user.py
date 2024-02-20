@@ -18,6 +18,7 @@ class ModelUserInDB(ModelUserBase):
 
 
 class ModelTokenData(BaseModel):
+    user_number: int | None = None
     user_id: str | None = None
     access_token: str | None = None
     token_type: str | None = None
