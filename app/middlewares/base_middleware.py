@@ -1,19 +1,17 @@
 import re
 import time
-from typing import Optional
 
 import sqlalchemy.exc
 from dependency_injector import containers
-from fastapi import HTTPException
-from jose import JWTError, jwt
-from starlette import status
+from jose import jwt
+from jose.exceptions import ExpiredSignatureError
 from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.common.config import get_config
 from app.database.redis_manger import get_user_cahce
-from app.errors.exceptions import APIException, InternalSqlEx, NotAuthorization, NotFoundUserEx
-from app.models.user import ModelTokenData
+from app.errors.exceptions import (APIException, ExpireJwtToken, InternalSqlEx,
+                                   NotAuthorization, NotFoundUserEx)
 from app.util.date_utils import D
 from app.util.logger import LogAdapter
 
@@ -30,11 +28,11 @@ async def base_control_middlewares(request: Request, call_next):
 
     request.state.req_time = D.datetime()
     request.state.start = time.time()
-    request.state.inspect = None
-    request.state.user = None
 
     headers = request.headers
     cookies = request.cookies
+    request.state.inspect = None
+    request.state.user = None
 
     # 프록시를 사용하여 x-forwarded-for 헤더가 있으면 그 값을, 없으면 클라이언트의 IP 주소를 사용합니다.
     if "x-forwarded-for" in request.headers:
@@ -58,20 +56,31 @@ async def base_control_middlewares(request: Request, call_next):
 
     # 토큰검증후 HTTP 요청처리
     try:
-        # 로그인 인증후 들어오는 요청은 토큰검사를 해야함
-        token = (
-            str(headers.get("authorization"))
+        token = {
+            "access_token": str(headers.get("authorization"))
             if "authorization" in headers.keys()
             else str(cookies.get("access_token"))
             if "access_token" in cookies.keys()
-            else None
-        )
+            else None,
+            "refresh_token": str(cookies.get("refresh_token") if "refresh_token" in cookies.keys() else None),
+        }
 
-        if token:
-            # 들어온 토큰으로 user_id 유효성 검사
-            await get_current_user(conf=config, token=token)
-        else:
-            raise NotAuthorization()
+        try:
+            if token.get("access_token"):
+                payload = jwt.decode(
+                    token["access_token"], config["JWT_ACCESS_SECRET_KEY"], algorithms=config["JWT_ALGORITHM"]
+                )
+                user_id: str | None = payload.get("sub")
+                if user_id is None:
+                    raise NotAuthorization()
+                user_info = await get_user_cahce(user_id=user_id, conf=config)
+                if not user_info:
+                    raise NotFoundUserEx()
+            else:
+                raise NotAuthorization()
+        except ExpiredSignatureError as e:
+            # 토큰 만료기한이 지났을경우 refresh_token으로 재발급
+            raise ExpireJwtToken(ex=e)
         return await call_next(request)
     except Exception as e:
         error = await exception_handler(e)
@@ -95,30 +104,3 @@ async def exception_handler(error: Exception):
     if not isinstance(error, APIException):
         error = APIException(ex=error)
     return error
-
-
-async def get_current_user(conf: get_config(), token: str):
-    credentials_exception = HTTPException(
-        status_code=status.HTTP_401_UNAUTHORIZED,
-        detail="Could not validate credentials",
-        headers={"WWW-Authenticate": "Bearer"},
-    )
-    try:
-        payload = jwt.decode(token, conf["JWT_SECRET_KEY"], algorithms=conf["JWT_ALGORITHM"])
-        # user_id 추출
-        payload_sub = payload.get("sub")
-        payload_user_id = payload.get("user_id")
-        user_id: Optional[str] = payload_sub if payload_sub is not None else payload_user_id
-        if user_id is None:
-            raise credentials_exception
-        token_data = ModelTokenData(user_id=user_id, access_token=token)
-    except JWTError:
-        raise credentials_exception
-    if token_data.user_id is not None:
-        # 레디스에서 유저정보 가져오기
-        user_info = await get_user_cahce(user_id=user_id, conf=conf)
-        if not user_info:
-            raise NotFoundUserEx()
-        return True
-    else:
-        raise NotAuthorization()

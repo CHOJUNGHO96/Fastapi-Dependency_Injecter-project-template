@@ -3,7 +3,8 @@ from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 
 from app.apis.v1.auth.registration.containers import Container
-from app.apis.v1.auth.registration.service.registration_service import RegistrationService
+from app.apis.v1.auth.registration.service.registration_service import \
+    RegistrationService
 from app.models.user import ModelTokenData, ModelUserRegister
 
 router = APIRouter()

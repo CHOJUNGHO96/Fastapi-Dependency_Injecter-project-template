@@ -1,10 +1,12 @@
 from celery import Celery
 from dependency_injector import containers, providers
-from fakeredis import FakeStrictRedis
 from fastapi.requests import Request
 
 from app.apis.v1.auth.login.containers import Container as LoginContainer
-from app.apis.v1.auth.registration.containers import Container as RegistrationContainer
+from app.apis.v1.auth.refresh_token.containers import \
+    Container as RefreshTokenContainer
+from app.apis.v1.auth.registration.containers import \
+    Container as RegistrationContainer
 from app.apis.v1.news.list.containers import Container as NewsListContainer
 from app.background.container import Container as BackgroundContainer
 from app.common.config import get_config
@@ -44,6 +46,7 @@ class Container(containers.DeclarativeContainer):
     # api 의존성 주입
     login_service = providers.Container(LoginContainer, db=db, config=config, redis=redis)
     registration_service = providers.Container(RegistrationContainer, db=db, config=config)
+    refresh_token_service = providers.Container(RefreshTokenContainer, db=db, config=config, redis=redis)
     news_list_service = providers.Container(NewsListContainer, db=db)
 
     # background 작업 의존성 주입

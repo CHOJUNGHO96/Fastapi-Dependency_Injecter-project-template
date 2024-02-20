@@ -29,16 +29,6 @@ class APIException(Exception):
         super().__init__(ex)
 
 
-class InvalidJwtToken(APIException):
-    def __init__(self, ex: Exception = Exception()):
-        super().__init__(
-            status_code=StatusCode.HTTP_400,
-            code=f"{StatusCode.HTTP_400}{'1'.zfill(4)}",
-            msg=f"Invalid JWT Token",
-            ex=ex,
-        )
-
-
 class NotAuthorization(APIException):
     def __init__(self, ex: Exception = Exception()):
         super().__init__(
@@ -49,12 +39,22 @@ class NotAuthorization(APIException):
         )
 
 
+class ExpireJwtToken(APIException):
+    def __init__(self, ex: Exception = Exception()):
+        super().__init__(
+            status_code=StatusCode.HTTP_401,
+            code=f"{StatusCode.HTTP_401}{'2'.zfill(4)}",
+            msg=f"Expire JWT Token",
+            ex=ex,
+        )
+
+
 class NotFoundUserEx(APIException):
     def __init__(self, ex: Exception = Exception()):
         super().__init__(
-            status_code=StatusCode.HTTP_404,
+            status_code=StatusCode.HTTP_401,
             msg=f"해당 유저를 찾을 수 없습니다.",
-            code=f"{StatusCode.HTTP_400}{'1'.zfill(4)}",
+            code=f"{StatusCode.HTTP_401}{'3'.zfill(4)}",
             ex=ex,
         )
 
@@ -62,9 +62,9 @@ class NotFoundUserEx(APIException):
 class BadPassword(APIException):
     def __init__(self, ex: Exception = Exception()):
         super().__init__(
-            status_code=StatusCode.HTTP_404,
+            status_code=StatusCode.HTTP_401,
             msg=f"Bad password",
-            code=f"{StatusCode.HTTP_400}{'1'.zfill(4)}",
+            code=f"{StatusCode.HTTP_401}{'4'.zfill(4)}",
             ex=ex,
         )
 
@@ -72,9 +72,19 @@ class BadPassword(APIException):
 class DuplicateUserEx(APIException):
     def __init__(self, ex: Exception = Exception(), user_id=""):
         super().__init__(
-            status_code=StatusCode.HTTP_409,
-            code=f"{StatusCode.HTTP_409}{'1'.zfill(4)}",
+            status_code=StatusCode.HTTP_401,
+            code=f"{StatusCode.HTTP_401}{'5'.zfill(4)}",
             msg=f"ID가 {user_id}인 유저가 존재합니다.",
+            ex=ex,
+        )
+
+
+class InvalidJwtToken(APIException):
+    def __init__(self, ex: Exception = Exception()):
+        super().__init__(
+            status_code=StatusCode.HTTP_401,
+            code=f"{StatusCode.HTTP_401}{'6'.zfill(4)}",
+            msg=f"Invalid JWT Token",
             ex=ex,
         )
 
@@ -91,7 +101,7 @@ class InternalSqlEx(APIException):
 class InternalQuerryEx(APIException):
     def __init__(self, ex: Exception = Exception()):
         super().__init__(
-            code=f"{StatusCode.HTTP_500}{'10'.zfill(4)}",
+            code=f"{StatusCode.HTTP_500}{'2'.zfill(4)}",
             msg=f"Query error",
             ex=ex,
         )
