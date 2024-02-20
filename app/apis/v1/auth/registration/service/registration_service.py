@@ -1,16 +1,18 @@
 import bcrypt
 
+from app.apis.v1.auth.authentication import Authentication
 from app.apis.v1.auth.registration.repositories.registration_repositories import \
     RegistrationRepository
 from app.models.user import ModelTokenData, ModelUserRegister
-from app.util.token import Token
 
 
 class RegistrationService:
-    def __init__(self, Registration_repository: RegistrationRepository, config: dict, token: Token) -> None:
+    def __init__(
+        self, Registration_repository: RegistrationRepository, config: dict, authentication: Authentication
+    ) -> None:
         self._repository: RegistrationRepository = Registration_repository
         self._config = config
-        self._token = token
+        self.authentication = authentication
 
     async def post_register_service(self, user_info: ModelUserRegister) -> ModelTokenData:
         """
@@ -31,6 +33,8 @@ class RegistrationService:
         user_info: dict | None = await self._repository.post_register_repository(user_info)
 
         # JWT토큰 생성
-        access_token = self._token.create_access_token(data={"sub": user_info["user_id"]}, conf=self._config)
+        access_token = self.authentication.create_jwt_access_token(
+            data={"sub": user_info["user_id"]}, conf=self._config
+        )
 
         return ModelTokenData(user_id=user_info["user_id"], token_type="bearer", access_token=access_token)

@@ -12,7 +12,6 @@ from app.common.config import get_config
 from app.database.conn import Database
 from app.database.redis_config import init_redis_pool
 from app.util.logger import LogAdapter
-from app.util.token import Token
 
 
 class Container(containers.DeclarativeContainer):
@@ -26,9 +25,6 @@ class Container(containers.DeclarativeContainer):
     config = providers.Configuration()
     config.from_dict(get_config().dict())
     conf = config()
-
-    # token 의존성 주입
-    token = providers.Singleton(Token)
 
     # logging 의존성 주입
     logging = providers.Singleton(LogAdapter, request=Request, response=None, error=None)
@@ -47,8 +43,8 @@ class Container(containers.DeclarativeContainer):
     )
 
     # api 의존성 주입
-    login_service = providers.Container(LoginContainer, db=db, config=config, token=token, redis=redis)
-    registration_service = providers.Container(RegistrationContainer, db=db, config=config, token=token)
+    login_service = providers.Container(LoginContainer, db=db, config=config, redis=redis)
+    registration_service = providers.Container(RegistrationContainer, db=db, config=config)
     news_list_service = providers.Container(NewsListContainer, db=db)
 
     # background 작업 의존성 주입

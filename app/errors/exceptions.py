@@ -59,6 +59,16 @@ class NotFoundUserEx(APIException):
         )
 
 
+class BadPassword(APIException):
+    def __init__(self, ex: Exception = Exception()):
+        super().__init__(
+            status_code=StatusCode.HTTP_404,
+            msg=f"Bad password",
+            code=f"{StatusCode.HTTP_400}{'1'.zfill(4)}",
+            ex=ex,
+        )
+
+
 class DuplicateUserEx(APIException):
     def __init__(self, ex: Exception = Exception(), user_id=""):
         super().__init__(
