@@ -5,7 +5,7 @@ router = APIRouter()
 
 
 @router.post("/logout")
-async def post_login():
+async def post_logout():
     """
     `로그아웃  API`
     """
