@@ -11,9 +11,8 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.common.config import get_config
-from app.database.redis_config import get_user_cahce
-from app.errors.exceptions import (APIException, InternalSqlEx,
-                                   NotAuthorization, NotFoundUserEx)
+from app.database.redis_manger import get_user_cahce
+from app.errors.exceptions import APIException, InternalSqlEx, NotAuthorization, NotFoundUserEx
 from app.models.user import ModelTokenData
 from app.util.date_utils import D
 from app.util.logger import LogAdapter

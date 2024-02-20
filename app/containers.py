@@ -4,20 +4,19 @@ from fakeredis import FakeStrictRedis
 from fastapi.requests import Request
 
 from app.apis.v1.auth.login.containers import Container as LoginContainer
-from app.apis.v1.auth.registration.containers import \
-    Container as RegistrationContainer
+from app.apis.v1.auth.registration.containers import Container as RegistrationContainer
 from app.apis.v1.news.list.containers import Container as NewsListContainer
 from app.background.container import Container as BackgroundContainer
 from app.common.config import get_config
 from app.database.conn import Database
-from app.database.redis_config import init_redis_pool
+from app.database.redis_manger import init_redis_pool
 from app.util.logger import LogAdapter
 
 
 class Container(containers.DeclarativeContainer):
     wiring_config = containers.WiringConfiguration(
         packages=[
-            "app.database.redis_config",
+            "app.database.redis_manger",
         ],
     )
 
