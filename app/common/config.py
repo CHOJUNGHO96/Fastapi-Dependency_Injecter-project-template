@@ -44,7 +44,6 @@ class MainConfig(BaseSettings):
 
     # TDD
     TEST_MODE: bool = False
-    # TEST_DB_URL: str
 
     class Config:
         env_prefix = ""  # 환경 변수 접두사 설정 (ex. "API_")
