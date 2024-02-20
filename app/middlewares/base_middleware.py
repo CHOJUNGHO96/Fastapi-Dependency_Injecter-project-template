@@ -35,6 +35,7 @@ async def base_control_middlewares(request: Request, call_next):
     request.state.user = None
 
     headers = request.headers
+    cookies = request.cookies
 
     # 프록시를 사용하여 x-forwarded-for 헤더가 있으면 그 값을, 없으면 클라이언트의 IP 주소를 사용합니다.
     if "x-forwarded-for" in request.headers:
@@ -59,12 +60,15 @@ async def base_control_middlewares(request: Request, call_next):
     # 토큰검증후 HTTP 요청처리
     try:
         # 로그인 인증후 들어오는 요청은 토큰검사를 해야함
-        if "authorization" in headers.keys():
-            if "Bearer" in str(headers.get("authorization")):
-                token = str(headers.get("authorization")).replace("Bearer ", "")
-            else:
-                token = str(headers.get("authorization"))
+        token = (
+            str(headers.get("authorization"))
+            if "authorization" in headers.keys()
+            else str(cookies.get("access_token"))
+            if "access_token" in cookies.keys()
+            else None
+        )
 
+        if token:
             # 들어온 토큰으로 user_id 유효성 검사
             await get_current_user(conf=config, token=token)
         else:
