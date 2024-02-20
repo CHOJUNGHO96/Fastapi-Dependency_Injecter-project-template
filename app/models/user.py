@@ -17,12 +17,7 @@ class ModelUserInDB(ModelUserBase):
     hashed_password: str
 
 
-class ModelToken(BaseModel):
-    user_number: int
-    access_token: str
-    token_type: str
-
-
 class ModelTokenData(BaseModel):
     user_id: str | None = None
-    token: str | None = None
+    access_token: str | None = None
+    token_type: str | None = None

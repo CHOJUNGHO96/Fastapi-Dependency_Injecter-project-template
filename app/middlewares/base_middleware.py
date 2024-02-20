@@ -11,7 +11,7 @@ from starlette.requests import Request
 from starlette.responses import JSONResponse
 
 from app.common.config import get_config
-from app.database.redis_config import get_user_cahce, init_redis_pool
+from app.database.redis_config import get_user_cahce
 from app.errors.exceptions import (APIException, InternalSqlEx,
                                    NotAuthorization, NotFoundUserEx)
 from app.models.user import ModelTokenData
@@ -108,7 +108,7 @@ async def get_current_user(conf: get_config(), token: str):
         user_id: Optional[str] = payload_sub if payload_sub is not None else payload_user_id
         if user_id is None:
             raise credentials_exception
-        token_data = ModelTokenData(user_id=user_id, token=token)
+        token_data = ModelTokenData(user_id=user_id, access_token=token)
     except JWTError:
         raise credentials_exception
     if token_data.user_id is not None:

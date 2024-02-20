@@ -6,7 +6,7 @@ from fastapi.responses import JSONResponse
 from app.apis.v1.auth.login.repositories.login_repositories import \
     LoginRepository
 from app.database.redis_config import init_redis_pool
-from app.models.user import ModelUserBase
+from app.models.user import ModelTokenData, ModelUserBase
 from app.util.token import Token
 
 
@@ -17,7 +17,7 @@ class LoginService:
         self._token = token
         self.redis = redis
 
-    async def post_login_service(self, user_info: ModelUserBase):
+    async def post_login_service(self, user_info: ModelUserBase) -> ModelTokenData | JSONResponse:
         """
         로그인 Service
         :param user_info: 유저정보
@@ -48,6 +48,6 @@ class LoginService:
                 ),
                 ex=self._config.get("REDIS_EXPIRE_TIME", 86400),
             )
-            return {"access_token": access_token, "token_type": "bearer", "user_number": response_user["user_number"]}
+            return ModelTokenData(user_id=response_user["user_id"], token_type="bearer", access_token=access_token)
         else:
             return JSONResponse(status_code=400, content=dict(msg="비밀번호가 일치하지 않습니다.", code="400"))
