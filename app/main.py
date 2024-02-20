@@ -1,6 +1,7 @@
 import uvicorn
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.openapi.utils import get_openapi
 from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.apis.v1.bridge_routes import api_router
@@ -33,6 +34,20 @@ def create_app() -> FastAPI:
     # 라우터정의
     _app.include_router(api_router, prefix="/api/v1")
 
+    # API 문서 정의
+    def custom_openapi():
+        if app.openapi_schema:
+            return app.openapi_schema
+        openapi_schema = get_openapi(
+            title=_app.container.config()["PROJECT_NAME"],
+            version=_app.container.config()["VERSION"],
+            summary="A project that can serve as a base for productivity when developing a backend web server with fastApi",
+            routes=_app.routes,
+        )
+        app.openapi_schema = openapi_schema
+        return app.openapi_schema
+
+    _app.openapi = custom_openapi
     return _app
 
 

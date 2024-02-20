@@ -12,6 +12,10 @@ class MainConfig(BaseSettings):
 
     DEBUG: bool = False
 
+    # BASE
+    PROJECT_NAME: str = "CJH_FASTAPI_TEMPLATE"
+    VERSION: str = "1.0.0"
+
     # JWT
     JWT_SECRET_KEY: str
     JWT_ALGORITHM: str
