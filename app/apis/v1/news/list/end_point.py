@@ -23,10 +23,7 @@ async def get_news_list_resources(
     """
     news_list: list = await news_list_service.get_news_list_service(news_info)
     if news_list:
-        response = JSONResponse(
-            content={"status": 200, "msg": "Success Get News List.", "code": "200", "list": news_list}
-        )
-        return response
+        return JSONResponse(content={"status": 200, "msg": "Success Get News List.", "code": "200", "list": news_list})
     else:
         return JSONResponse(
             status_code=422, content={"status": 422, "msg": "News Not Found", "code": "422", "list": []}
@@ -44,10 +41,9 @@ async def post_news_list_resources(
     """
     news_list: list = await news_list_service.post_news_list_service(news_info)
     if news_list:
-        response = JSONResponse(
+        return JSONResponse(
             content={"status": 200, "msg": "Success Registrate News List.", "code": "200", "list": news_list}
         )
-        return response
     else:
         return JSONResponse(
             status_code=422, content={"status": 422, "msg": "Fail to news registrate", "code": "422", "list": []}
@@ -65,10 +61,9 @@ async def put_news_list_resources(
     """
     news_list: list = await news_list_service.put_news_list_service(news_info)
     if news_list:
-        response = JSONResponse(
+        return JSONResponse(
             content={"status": 200, "msg": "Success Update News List.", "code": "200", "list": news_list}
         )
-        return response
     else:
         return JSONResponse(
             status_code=422, content={"status": 422, "msg": "Fail to news update", "code": "422", "list": []}
@@ -86,10 +81,9 @@ async def delete_news_list_resources(
     """
     news_list: list = await news_list_service.delete_news_list_service(news_info)
     if news_list:
-        response = JSONResponse(
+        return JSONResponse(
             content={"status": 200, "msg": "Success Delte News List.", "code": "200", "list": news_list}
         )
-        return response
     else:
         return JSONResponse(
             status_code=422, content={"status": 422, "msg": "Fail to news delete", "code": "422", "list": []}
