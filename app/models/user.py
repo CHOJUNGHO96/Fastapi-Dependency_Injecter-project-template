@@ -13,10 +13,6 @@ class ModelUserRegister(ModelUserBase):
     user_name: str
 
 
-class ModelUserInDB(ModelUserBase):
-    hashed_password: str
-
-
 class ModelTokenData(BaseModel):
     user_number: int | None = None
     user_id: str | None = None

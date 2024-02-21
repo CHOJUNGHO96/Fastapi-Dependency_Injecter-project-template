@@ -24,7 +24,3 @@ class ModelNewsPut(ModelNewsBase):
 
 class ModelNewsDelete(BaseModel):
     article_id: int
-
-
-class ModelNewsCudResponse(BaseModel):
-    article_id: int
