@@ -1,6 +1,7 @@
 """Tests module."""
 import pytest
 from dependency_injector import containers
+from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.testclient import TestClient
 
 from app.database.schema.base import Base
@@ -34,17 +35,22 @@ async def test_registration(client: TestClient):
     )
     response_body = response.json()
     assert response.status_code == 200
-    assert response_body["msg"] == "회원가입 성공"
+    assert response_body["msg"] == "Success Register."
 
 
 @pytest.mark.asyncio
 async def test_login(client: TestClient):
     response = client.post(
         url="auth/login",
-        json={"user_id": "test", "user_password": "test123!"},
+        data={
+            "username": "test",
+            "password": "test123!",
+        },
     )
     response_body = response.json()
     assert response.status_code == 200
-    assert "access_token" in response_body.keys()
-    client.app_state.update({"user_id": response_body["user_id"], "user_number": response_body["user_number"]})
-    client.headers.update({"authorization": f"{response_body['access_token']}"})
+    assert "access_token" in response_body["list"]
+    client.app_state.update(
+        {"user_id": response_body["list"]["user_id"], "user_number": response_body["list"]["user_number"]}
+    )
+    client.headers.update({"authorization": f"{response_body['list']['access_token']}"})
