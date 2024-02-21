@@ -1,7 +1,6 @@
 """Tests module."""
 import pytest
 from dependency_injector import containers
-from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.testclient import TestClient
 
 from app.database.schema.base import Base
