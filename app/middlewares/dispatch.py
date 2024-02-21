@@ -16,9 +16,8 @@ from app.util.date_utils import D
 from app.util.logger import LogAdapter
 
 
-async def base_control_middlewares(request: Request, call_next):
+async def dispatch_middleware(request: Request, call_next):
     """
-    베이스 미들웨어
     이 함수는 모든 HTTP 요청에 대해 호출됩니다.
     여기에는 요청 로깅, 토큰 검증, 에러 처리 등이 포함됩니다.
     """

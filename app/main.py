@@ -6,7 +6,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 
 from app.apis.v1.bridge_routes import api_router
 from app.containers import Container
-from app.middlewares.base_middleware import base_control_middlewares
+from app.middlewares.dispatch import dispatch_middleware
 
 
 def create_app() -> FastAPI:
@@ -21,7 +21,7 @@ def create_app() -> FastAPI:
     _app.container = container
 
     # 미들웨어 정의
-    _app.add_middleware(middleware_class=BaseHTTPMiddleware, dispatch=base_control_middlewares)
+    _app.add_middleware(middleware_class=BaseHTTPMiddleware, dispatch=dispatch_middleware)
 
     _app.add_middleware(
         CORSMiddleware,
