@@ -21,14 +21,14 @@ class LoginRepository:
         """
         try:
             async with self.session_factory() as session:
-                result = await session.scalars(select(User).where(User.user_id == user_info.username))
+                result = await session.scalars(select(User).where(User.login_id == user_info.username))
                 user = result.first()
                 if not user:
                     return None
                 return {
-                    "user_number": user.user_number,
-                    "user_password": user.user_password,
                     "user_id": user.user_id,
+                    "user_password": user.user_password,
+                    "login_id": user.login_id,
                     "user_name": user.user_name,
                     "user_email": user.user_email,
                 }

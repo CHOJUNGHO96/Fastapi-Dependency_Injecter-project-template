@@ -10,8 +10,8 @@ class SqlalchemyHelper:
         conditions = []
         if news_info.article_id is not None:
             conditions.append(news_schema.article_id == news_info.article_id)
-        if news_info.user_number is not None:
-            conditions.append(news_schema.user_number == news_info.user_number)
+        if news_info.user_id is not None:
+            conditions.append(news_schema.user_id == news_info.user_id)
         if news_info.title is not None:
             conditions.append(news_schema.title.ilike(f"%{news_info.title}%"))
         if news_info.content is not None:

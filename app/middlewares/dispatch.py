@@ -69,10 +69,10 @@ async def dispatch_middleware(request: Request, call_next):
                 payload = jwt.decode(
                     token["access_token"], config["JWT_ACCESS_SECRET_KEY"], algorithms=config["JWT_ALGORITHM"]
                 )
-                user_id: str | None = payload.get("sub")
-                if user_id is None:
+                login_id: str | None = payload.get("sub")
+                if login_id is None:
                     raise NotAuthorization()
-                user_info = await get_user_cahce(user_id=user_id, conf=config)
+                user_info = await get_user_cahce(login_id=login_id, conf=config)
                 if not user_info:
                     raise NotFoundUserEx()
             else:

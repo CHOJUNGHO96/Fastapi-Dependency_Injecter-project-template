@@ -37,18 +37,18 @@ class LoginService:
         if self.authentication.verify_password(user_password, response_user["user_password"].encode("utf-8")):
             # JWT토큰 생성
             access_token = self.authentication.create_jwt_token(
-                data={"sub": response_user["user_id"]}, conf=self._config, token_type="ACCESS"
+                data={"sub": response_user["login_id"]}, conf=self._config, token_type="ACCESS"
             )
             refresh_token = self.authentication.create_jwt_token(
-                data={"sub": response_user["user_id"]}, conf=self._config, token_type="REFRESH"
+                data={"sub": response_user["login_id"]}, conf=self._config, token_type="REFRESH"
             )
             # 레디스에 유저정보 저장
             await self.redis.set(
-                name=f"cahce_user_info_{response_user['user_id']}",
+                name=f"cahce_user_info_{response_user['login_id']}",
                 value=str(
                     {
-                        "user_number": response_user["user_number"],
                         "user_id": response_user["user_id"],
+                        "login_id": response_user["login_id"],
                         "user_name": response_user["user_name"],
                         "user_email": response_user["user_email"],
                         "access_token": access_token,
@@ -59,7 +59,7 @@ class LoginService:
             )
             return ModelTokenData(
                 user_id=response_user["user_id"],
-                user_number=response_user["user_number"],
+                login_id=response_user["login_id"],
                 token_type="bearer",
                 access_token=access_token,
                 refresh_token=refresh_token,

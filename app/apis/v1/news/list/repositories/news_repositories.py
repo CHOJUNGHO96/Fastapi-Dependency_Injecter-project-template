@@ -42,7 +42,7 @@ class NewsListRepository:
                         "title": news.title,
                         "content": news.content,
                         "source": news.source,
-                        "user_number": news.user_number,
+                        "user_id": news.user_id,
                         "url": news.url,
                     }
                     for news in news_list

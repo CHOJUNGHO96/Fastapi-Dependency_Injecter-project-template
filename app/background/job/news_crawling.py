@@ -63,9 +63,7 @@ class NewsCrawling:
 
                 # 브라우저 닫기
                 driver.quit()
-                insert_target.append(
-                    {"title": title, "content": content, "url": url, "source": "아리랑TV", "user_number": 1}
-                )
+                insert_target.append({"title": title, "content": content, "url": url, "source": "아리랑TV", "user_id": 1})
             except Exception as e:
                 print(e)
                 continue

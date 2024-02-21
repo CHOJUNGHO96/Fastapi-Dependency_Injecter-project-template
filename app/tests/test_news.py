@@ -12,7 +12,7 @@ async def test_post_news_list(client: TestClient):
             "content": "test_content",
             "source": "test_source",
             "url": "test_url",
-            "user_number": client.app_state["user_number"],
+            "user_id": client.app_state["user_id"],
         },
     )
     assert response.status_code == 200

@@ -27,7 +27,7 @@ async def test_registration(client: TestClient):
         url=f"auth/register",
         json={
             "user_email": "test@test.com",
-            "user_id": "test",
+            "login_id": "test",
             "user_password": "test123!",
             "user_name": "테스트유저",
         },
@@ -50,6 +50,6 @@ async def test_login(client: TestClient):
     assert response.status_code == 200
     assert "access_token" in response_body["list"]
     client.app_state.update(
-        {"user_id": response_body["list"]["user_id"], "user_number": response_body["list"]["user_number"]}
+        {"user_id": response_body["list"]["user_id"], "login_id": response_body["list"]["login_id"]}
     )
     client.headers.update({"authorization": f"{response_body['list']['access_token']}"})

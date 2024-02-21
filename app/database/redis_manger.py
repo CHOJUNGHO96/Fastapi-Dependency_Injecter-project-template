@@ -21,21 +21,21 @@ async def init_redis_pool(conf: get_config) -> AsyncIterator[aioredis.Redis]:
 
 
 @inject
-async def get_user_cahce(user_id: str, conf: get_config, redis=Provide["redis"]) -> str | None:
+async def get_user_cahce(login_id: str, conf: get_config, redis=Provide["redis"]) -> str | None:
     """
     유저정보 캐시로 관리
     """
     try:
         if redis is None:
             raise ValueError("Redis 인스턴스가 초기화되지 않았습니다.")
-        cahce_user = await redis.get(f"cahce_user_info_{user_id}")
+        cahce_user = await redis.get(f"cahce_user_info_{login_id}")
         if cahce_user is None:
             await redis.set(
-                name=f"cahce_user_info_{user_id}",
+                name=f"cahce_user_info_{login_id}",
                 value=str(json.dumps(cahce_user)),
                 ex=conf["redis_expire_time"],
             )
-            cahce_user = await redis.get(f"cahce_user_info_{user_id}")
+            cahce_user = await redis.get(f"cahce_user_info_{login_id}")
         if isinstance(cahce_user, bytes):
             cahce_user = cahce_user.decode()
             return cahce_user

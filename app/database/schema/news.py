@@ -12,5 +12,5 @@ class News(Base):
     source = Column(String(100), nullable=False)
     reg_date = Column(DateTime)
     url = Column(String(255), nullable=False)
-    user_number = Column(Integer, nullable=False)
+    user_id = Column(Integer, nullable=False)
     is_enable = Column(Integer, default=1)

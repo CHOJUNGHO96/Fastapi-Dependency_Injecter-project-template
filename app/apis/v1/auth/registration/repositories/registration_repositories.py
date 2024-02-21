@@ -35,11 +35,11 @@ class RegistrationRepository:
         """
         try:
             async with self.session_factory() as session:
-                result = await session.scalars(select(User).where(User.user_id == user_info.user_id))
+                result = await session.scalars(select(User).where(User.login_id == user_info.login_id))
                 user = result.first()
                 if user is None:
                     return True
                 else:
-                    raise ex.DuplicateUserEx(user_id=user_info.user_id)
+                    raise ex.DuplicateUserEx(user_id=user_info.login_id)
         except SQLAlchemyError as e:
             raise ex.InternalSqlEx(ex=e)
