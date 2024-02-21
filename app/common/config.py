@@ -48,7 +48,7 @@ class MainConfig(BaseSettings):
     TEST_MODE: bool = False
 
     class Config:
-        env_prefix = ""  # 환경 변수 접두사 설정 (ex. "API_")
+        env_file = ".env"
 
 
 class LocalConfig(MainConfig):
