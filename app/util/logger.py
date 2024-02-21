@@ -18,9 +18,6 @@ class LogAdapter:
     async def api_logger(self, request: Request, response=None, error=None):
         """
         API 로그를 남기는 함수
-        :param request: HTTP 요청객체
-        :param response: HTTP 응답객체
-        :param error: 에러객체
         """
         time_format = "%Y/%m/%d %H:%M:%S"
         t = time() - request.state.start
