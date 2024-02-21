@@ -1,11 +1,13 @@
 from typing import Any
 
+from fastapi.security import OAuth2PasswordRequestForm
+
 from app.apis.v1.auth.authentication import Authentication
 from app.apis.v1.auth.login.repositories.login_repositories import \
     LoginRepository
 from app.database.redis_manger import init_redis_pool
 from app.errors import exceptions as ex
-from app.models.user import ModelTokenData, ModelUserBase
+from app.models.user import ModelTokenData
 
 
 class LoginService:
@@ -17,13 +19,13 @@ class LoginService:
         self.authentication = authentication
         self.redis = redis
 
-    async def post_login_service(self, user_info: ModelUserBase) -> ModelTokenData:
+    async def post_login_service(self, user_info: OAuth2PasswordRequestForm) -> ModelTokenData:
         """
         로그인 Service
         :param user_info: 유저정보
         """
-        password = user_info.user_password
-        del user_info.user_password
+        user_password = user_info.password
+        del user_info.password
 
         # 레파지토리 호출
         response_user: dict[Any, Any] | None = await self._repository.post_login_repository(user_info)
@@ -32,7 +34,7 @@ class LoginService:
             raise ex.NotFoundUserEx()
 
         # 비밀번호 체크
-        if self.authentication.verify_password(password, response_user["user_password"].encode("utf-8")):
+        if self.authentication.verify_password(user_password, response_user["user_password"].encode("utf-8")):
             # JWT토큰 생성
             access_token = self.authentication.create_jwt_token(
                 data={"sub": response_user["user_id"]}, conf=self._config, token_type="ACCESS"
