@@ -45,17 +45,17 @@ async def base_control_middlewares(request: Request, call_next):
 
     # 토큰검증없이 접속가능한 url 처리 작업
     url = request.url.path
-    if await url_pattern_check(url, "^(/docs|/redoc|/api/v1/auth)") or url in [
-        "/",
-        "/openapi.json",
-    ]:
-        response = await call_next(request)
-        if url != "/":
-            await logger.api_logger(request=request, response=response)
-        return response
-
-    # 토큰검증후 HTTP 요청처리
     try:
+        if await url_pattern_check(url, "^(/docs|/redoc|/api/v1/auth)") or url in [
+            "/",
+            "/openapi.json",
+        ]:
+            response = await call_next(request)
+            if url != "/":
+                await logger.api_logger(request=request, response=response)
+            return response
+
+        # 토큰검증후 HTTP 요청처리
         token = {
             "access_token": str(headers.get("authorization"))
             if "authorization" in headers.keys()
@@ -84,7 +84,7 @@ async def base_control_middlewares(request: Request, call_next):
         return await call_next(request)
     except Exception as e:
         error = await exception_handler(e)
-        error_dict = dict(status=error.status_code, msg=error.msg, code=error.code)
+        error_dict = dict(status=error.status_code, msg=error.msg, code=error.code, list=[])
         response = JSONResponse(status_code=error.status_code, content=error_dict)
         await logger.api_logger(request=request, error=error)
         return response

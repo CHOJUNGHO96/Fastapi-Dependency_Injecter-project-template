@@ -12,13 +12,13 @@ class NewsListService:
     def __init__(self, news_list_repository: NewsListRepository) -> None:
         self._repository: NewsListRepository = news_list_repository
 
-    async def get_news_list_service(self, new_info: ModelNewsBase) -> list[dict] | list:
+    async def get_news_list_service(self, news_info: ModelNewsBase) -> list[dict] | list:
         """
         Get Service
         """
 
         # 레파지토리 호출
-        news_list: list[dict] | list = await self._repository.get_news_list_repository(new_info)
+        news_list: list[dict] | list = await self._repository.get_news_list_repository(news_info)
         return news_list
 
     async def post_news_list_service(self, news_info: ModelNewsRegister) -> list[dict] | list:

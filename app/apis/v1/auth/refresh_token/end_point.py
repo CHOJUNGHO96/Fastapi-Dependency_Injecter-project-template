@@ -1,19 +1,20 @@
 from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, Response, requests
+from fastapi import APIRouter, Depends, requests
+from fastapi.responses import JSONResponse
 
 from app.apis.v1.auth.refresh_token.containers import Container
 from app.apis.v1.auth.refresh_token.service.refresh_token_service import \
     RefreshTokenService
+from app.models.response import ResponseModel
 from app.models.user import ModelTokenData
 
 router = APIRouter()
 
 
-@router.get("/refresh_token")
+@router.get("/refresh_token", response_model=ResponseModel)
 @inject
 async def get_refresh_token(
     req: requests.Request,
-    response: Response,
     user_id: str,
     refresh_token_service: RefreshTokenService = Depends(Provide[Container.refresh_token_service]),
 ):
@@ -22,12 +23,17 @@ async def get_refresh_token(
     """
     if "refresh_token" in req.cookies:
         user_data: ModelTokenData = await refresh_token_service.get_refresh_token_service(user_id)
+        response = JSONResponse(
+            content={"status": 200, "msg": "Suceess Refresh Token.", "code": 200, "list": [user_data.dict()]}
+        )
         response.set_cookie(
             key="token_type",
             value=user_data.token_type,
         )
         response.set_cookie(key="access_token", value=user_data.access_token)
         response.set_cookie(key="refresh_token", value=user_data.refresh_token)
-        return user_data
+        return response
     else:
-        return {"status_code": 401, "message": "refresh_token not in cookies"}
+        return JSONResponse(
+            status_code=422, content={"status": 422, "msg": "Token not in cookie", "code": 422, "list": []}
+        )
