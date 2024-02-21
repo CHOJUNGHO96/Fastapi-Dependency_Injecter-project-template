@@ -10,8 +10,7 @@ from starlette.responses import JSONResponse
 
 from app.common.config import get_config
 from app.database.redis_manger import get_user_cahce
-from app.errors.exceptions import (APIException, ExpireJwtToken, InternalSqlEx,
-                                   NotAuthorization, NotFoundUserEx)
+from app.errors.exceptions import APIException, ExpireJwtToken, InternalSqlEx, NotAuthorization, NotFoundUserEx
 from app.util.date_utils import D
 from app.util.logger import LogAdapter
 
@@ -78,7 +77,6 @@ async def dispatch_middleware(request: Request, call_next):
             else:
                 raise NotAuthorization()
         except ExpiredSignatureError as e:
-            # 토큰 만료기한이 지났을경우 refresh_token으로 재발급
             raise ExpireJwtToken(ex=e)
         return await call_next(request)
     except Exception as e:
