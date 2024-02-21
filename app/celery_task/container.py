@@ -1,8 +1,7 @@
-import pika
 from celery import Celery
 from dependency_injector import containers, providers
 
-from app.background.job.news_crawling import NewsCrawling
+from app.celery_task.job.news_crawling import NewsCrawling
 from app.common.config import get_config
 from app.database.conn import Database
 

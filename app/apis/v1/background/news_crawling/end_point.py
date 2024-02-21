@@ -1,7 +1,7 @@
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
 
-from app.background.worker import celery_app
+from app.celery_task.worker import celery_app
 from app.models.response import ResponseModel
 
 router = APIRouter()
