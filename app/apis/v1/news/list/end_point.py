@@ -25,9 +25,7 @@ async def get_news_list_resources(
     if news_list:
         return JSONResponse(content={"status": 200, "msg": "Success Get News List.", "code": "200", "list": news_list})
     else:
-        return JSONResponse(
-            status_code=422, content={"status": 422, "msg": "News Not Found", "code": "422", "list": []}
-        )
+        return JSONResponse(content={"status": 200, "msg": "No Data", "code": "422", "list": news_list})
 
 
 @router.post("/list", response_model=ResponseModel)
@@ -46,7 +44,7 @@ async def post_news_list_resources(
         )
     else:
         return JSONResponse(
-            status_code=422, content={"status": 422, "msg": "Fail to news registrate", "code": "422", "list": []}
+            status_code=422, content={"status": 422, "msg": "Fail to news registrate", "code": "422", "list": news_list}
         )
 
 
@@ -66,7 +64,7 @@ async def put_news_list_resources(
         )
     else:
         return JSONResponse(
-            status_code=422, content={"status": 422, "msg": "Fail to news update", "code": "422", "list": []}
+            status_code=422, content={"status": 422, "msg": "Fail to news update", "code": "422", "list": news_list}
         )
 
 
@@ -86,5 +84,5 @@ async def delete_news_list_resources(
         )
     else:
         return JSONResponse(
-            status_code=422, content={"status": 422, "msg": "Fail to news delete", "code": "422", "list": []}
+            status_code=422, content={"status": 422, "msg": "Fail to news delete", "code": "422", "list": news_list}
         )
