@@ -19,7 +19,7 @@ class Container(containers.DeclarativeContainer):
     celery_app = providers.Singleton(
         Celery,
         broker=f"redis://:{conf['REDIS_PASSWORD']}@{conf['REDIS_HOST']}:{conf['REDIS_PORT']}/0",
-        imports=["background.run"],
+        imports=["app.celery_task.run"],
     )
 
     # news_crawling

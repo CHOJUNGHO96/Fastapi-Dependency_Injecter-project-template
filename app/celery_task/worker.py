@@ -13,7 +13,7 @@ celery_app.conf.timezone = "Asia/Seoul"
 # beat 스케줄 초기화
 celery_app.conf.beat_schedule = {
     "run_news_crawling_1_min": {
-        "task": "background.run.run_news_crawling",
+        "task": "app.celery_task.run.run_news_crawling",
         # "schedule": 20.0,
         "schedule": crontab(hour="7", minute="0"),
     },

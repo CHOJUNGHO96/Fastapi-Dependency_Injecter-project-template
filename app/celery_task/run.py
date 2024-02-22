@@ -1,8 +1,8 @@
 import asyncio
 
-from app.celery_task.container import Container as BackgroundContainer
+from app.celery_task.container import Container as CeleryContainer
 
-container = BackgroundContainer()
+container = CeleryContainer()
 celery_app = container.celery_app()
 
 
