@@ -8,7 +8,7 @@ from app.apis.v1.auth.refresh_token.containers import \
 from app.apis.v1.auth.registration.containers import \
     Container as RegistrationContainer
 from app.apis.v1.news.list.containers import Container as NewsListContainer
-from app.background.container import Container as BackgroundContainer
+from app.celery_task.container import Container as BackgroundContainer
 from app.common.config import get_config
 from app.database.conn import Database
 from app.database.redis_manger import init_redis_pool
