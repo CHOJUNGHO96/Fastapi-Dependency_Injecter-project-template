@@ -3,11 +3,8 @@ from typing import Callable
 
 from bs4 import BeautifulSoup
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
-from selenium.webdriver.chrome.service import Service
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
-from webdriver_manager.chrome import ChromeDriverManager
 
 from app.database.schema.news import News
 
@@ -36,14 +33,16 @@ class NewsCrawling:
                 url_id = 264834
 
         # selenium 설정
-        chrome_options = Options()
-        chrome_options.add_argument("--headless")  # headless 모드 활성화
-        service = Service(ChromeDriverManager().install())
+        chrome_options = webdriver.ChromeOptions()
+        chrome_options.add_argument("--headless")
+        chrome_options.add_argument("--no-sandbox")
+        chrome_options.add_argument("--disable-dev-shm-usage")
+        chrome_options.add_argument("--window-size=1920,1080")
 
         insert_target = []
         for _url_id in range(url_id + 1, url_id + 4):
             try:
-                driver = webdriver.Chrome(service=service, options=chrome_options)
+                driver = webdriver.Chrome(options=chrome_options)
 
                 # 크롤링할 페이지 접속
                 url = f"https://www.arirang.com/news/view/?id={str(_url_id)}"
