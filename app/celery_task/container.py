@@ -13,14 +13,14 @@ class Container(containers.DeclarativeContainer):
     conf = config()
 
     # db 인스턴스 의존성 주입
-    db = providers.Singleton(Database, conf=config)
+    db = providers.Factory(Database, conf=config)
 
     # celery 인스턴스 의존성 주입
-    celery_app = providers.Singleton(
+    celery_app = providers.Factory(
         Celery,
         broker=f"redis://:{conf['REDIS_PASSWORD']}@{conf['REDIS_HOST']}:{conf['REDIS_PORT']}/0",
         imports=["app.celery_task.run"],
     )
 
     # news_crawling
-    celery_news_crawling = providers.Singleton(NewsCrawling, session_factory=db.provided.session)
+    celery_news_crawling = providers.Factory(NewsCrawling, session_factory=db.provided.session)
