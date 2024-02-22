@@ -1,9 +1,8 @@
 """Tests module."""
 import pytest
+from app.database.schema.base import Base
 from dependency_injector import containers
 from fastapi.testclient import TestClient
-
-from app.database.schema.base import Base
 
 
 async def delete_data(container: containers):

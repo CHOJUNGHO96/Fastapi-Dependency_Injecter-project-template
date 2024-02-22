@@ -2,10 +2,9 @@ import json
 from typing import AsyncIterator
 
 import fakeredis.aioredis
+from app.common.config import get_config
 from dependency_injector.wiring import Provide, inject
 from redis import asyncio as aioredis
-
-from app.common.config import get_config
 
 
 async def init_redis_pool(conf: get_config) -> AsyncIterator[aioredis.Redis]:

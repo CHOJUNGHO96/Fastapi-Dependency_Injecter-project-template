@@ -1,11 +1,10 @@
-from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends
-from fastapi.responses import JSONResponse
-
 from app.apis.v1.news.list.containers import Container
 from app.models.news import (ModelNewsBase, ModelNewsDelete, ModelNewsPut,
                              ModelNewsRegister)
 from app.models.response import ResponseModel
+from dependency_injector.wiring import Provide, inject
+from fastapi import APIRouter, Depends
+from fastapi.responses import JSONResponse
 
 from .service.news_service import NewsListService
 

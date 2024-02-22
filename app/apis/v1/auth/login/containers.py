@@ -1,9 +1,8 @@
-from dependency_injector import containers, providers
-
 from app.apis.v1.auth.authentication import Authentication
 from app.apis.v1.auth.login.repositories.login_repositories import \
     LoginRepository
 from app.apis.v1.auth.login.service.login_service import LoginService
+from dependency_injector import containers, providers
 
 
 class Container(containers.DeclarativeContainer):

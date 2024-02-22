@@ -1,11 +1,10 @@
+from app.apis.v1.auth.login.containers import Container
+from app.models.response import ResponseModel
+from app.models.user import ModelTokenData
 from dependency_injector.wiring import Provide, inject
 from fastapi import APIRouter, Depends
 from fastapi.responses import JSONResponse
 from fastapi.security import OAuth2PasswordRequestForm
-
-from app.apis.v1.auth.login.containers import Container
-from app.models.response import ResponseModel
-from app.models.user import ModelTokenData
 
 from .service.login_service import LoginService
 

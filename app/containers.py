@@ -1,7 +1,3 @@
-from celery import Celery
-from dependency_injector import containers, providers
-from fastapi.requests import Request
-
 from app.apis.v1.auth.login.containers import Container as LoginContainer
 from app.apis.v1.auth.refresh_token.containers import \
     Container as RefreshTokenContainer
@@ -13,6 +9,9 @@ from app.common.config import get_config
 from app.database.conn import Database
 from app.database.redis_manger import init_redis_pool
 from app.util.logger import LogAdapter
+from celery import Celery
+from dependency_injector import containers, providers
+from fastapi.requests import Request
 
 
 class Container(containers.DeclarativeContainer):

@@ -1,8 +1,7 @@
+from app.celery_task.container import Container
 from celery import Celery
 from celery.schedules import crontab
 from dependency_injector import containers
-
-from app.celery_task.container import Container
 
 container: containers = Container()
 celery_app: Celery = container.celery_app()

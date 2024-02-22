@@ -1,7 +1,6 @@
+from app.models.response import ResponseModel
 from fastapi import APIRouter
 from fastapi.responses import JSONResponse
-
-from app.models.response import ResponseModel
 
 router = APIRouter()
 

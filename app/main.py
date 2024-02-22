@@ -1,12 +1,11 @@
 import uvicorn
+from app.apis.v1.bridge_routes import api_router
+from app.containers import Container
+from app.middlewares.dispatch import dispatch_middleware
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.openapi.utils import get_openapi
 from starlette.middleware.base import BaseHTTPMiddleware
-
-from app.apis.v1.bridge_routes import api_router
-from app.containers import Container
-from app.middlewares.dispatch import dispatch_middleware
 
 
 def create_app() -> FastAPI:

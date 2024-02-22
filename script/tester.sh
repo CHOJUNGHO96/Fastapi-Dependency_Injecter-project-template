@@ -7,16 +7,16 @@ COLOR_GREEN=`tput setaf 2;`
 COLOR_NC=`tput sgr0;` # No Color
 
 echo "Starting black"
-poetry run black .
+poetry run black ..
 echo "OK"
 
 echo "Starting isort"
-poetry run isort .
+poetry run isort ..
 echo "OK"
 
 
 echo "Sort pyproject.toml"
-poetry run toml-sort pyproject.toml --all --in-place
+poetry run toml-sort ../pyproject.toml --all --in-place
 echo "OK"
 
 

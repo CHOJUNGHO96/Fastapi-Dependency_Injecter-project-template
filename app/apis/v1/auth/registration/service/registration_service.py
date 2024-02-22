@@ -1,5 +1,4 @@
 import bcrypt
-
 from app.apis.v1.auth.authentication import Authentication
 from app.apis.v1.auth.registration.repositories.registration_repositories import \
     RegistrationRepository

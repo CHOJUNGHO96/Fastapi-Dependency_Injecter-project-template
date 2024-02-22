@@ -1,12 +1,11 @@
-from dependency_injector.wiring import Provide, inject
-from fastapi import APIRouter, Depends, requests
-from fastapi.responses import JSONResponse
-
 from app.apis.v1.auth.refresh_token.containers import Container
 from app.apis.v1.auth.refresh_token.service.refresh_token_service import \
     RefreshTokenService
 from app.models.response import ResponseModel
 from app.models.user import ModelTokenData
+from dependency_injector.wiring import Provide, inject
+from fastapi import APIRouter, Depends, requests
+from fastapi.responses import JSONResponse
 
 router = APIRouter()
 

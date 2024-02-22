@@ -1,13 +1,12 @@
 from typing import Any
 
-from fastapi.security import OAuth2PasswordRequestForm
-
 from app.apis.v1.auth.authentication import Authentication
 from app.apis.v1.auth.login.repositories.login_repositories import \
     LoginRepository
 from app.database.redis_manger import init_redis_pool
 from app.errors import exceptions as ex
 from app.models.user import ModelTokenData
+from fastapi.security import OAuth2PasswordRequestForm
 
 
 class LoginService:
