@@ -32,5 +32,5 @@ RUN wget -q -O - https://dl-ssl.google.com/linux/linux_signing_key.pub | apt-key
     && unzip chromedriver_linux64.zip \
     && apt-get install xvfb -y
 
-# Uvicorn을 사용하여 FastAPI 애플리케이션 실행
-CMD ["gunicorn", "app.main:app", "-k", "uvicorn.workers.UvicornWorker", "--workers", "4", "--bind", "0.0.0.0:5050"]
+# Start Gunicorn with Uvicorn
+CMD ["/app/scripts/start.sh"]

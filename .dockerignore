@@ -5,6 +5,4 @@
 .env
 Dockerfile
 *.md
-*.sh
 *.yml
-scripts
