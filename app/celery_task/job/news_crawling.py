@@ -1,11 +1,12 @@
 from contextlib import AbstractAsyncContextManager
 from typing import Callable
 
-from app.database.schema.news import News
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from sqlalchemy import insert, select
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.database.schema.news import News
 
 
 class NewsCrawling:

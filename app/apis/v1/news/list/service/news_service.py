@@ -1,7 +1,10 @@
-from app.apis.v1.news.list.repositories.news_repositories import \
-    NewsListRepository
-from app.models.news import (ModelNewsBase, ModelNewsDelete, ModelNewsPut,
-                             ModelNewsRegister)
+from app.apis.v1.news.list.repositories.news_repositories import NewsListRepository
+from app.models.news import (
+    ModelNewsBase,
+    ModelNewsDelete,
+    ModelNewsPut,
+    ModelNewsRegister,
+)
 
 
 class NewsListService:

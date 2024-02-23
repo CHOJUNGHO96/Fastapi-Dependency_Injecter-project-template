@@ -1,12 +1,13 @@
 from contextlib import AbstractAsyncContextManager
 from typing import Callable
 
-from app.database.schema.user import User
-from app.errors import exceptions as ex
 from fastapi.security import OAuth2PasswordRequestForm
 from sqlalchemy import select
 from sqlalchemy.exc import SQLAlchemyError
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from app.database.schema.user import User
+from app.errors import exceptions as ex
 
 
 class LoginRepository:

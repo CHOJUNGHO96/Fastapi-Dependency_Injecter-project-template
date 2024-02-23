@@ -1,8 +1,9 @@
+from fastapi import APIRouter, Depends
+from fastapi.security import APIKeyHeader
+
 from app.apis.v1.auth.routes import auth_api_router
 from app.apis.v1.background.routes import background_api_router
 from app.apis.v1.news.routes import news_api_router
-from fastapi import APIRouter, Depends
-from fastapi.security import APIKeyHeader
 
 API_KEY_HEADER = APIKeyHeader(name="Authorization", auto_error=False)
 api_router = APIRouter()

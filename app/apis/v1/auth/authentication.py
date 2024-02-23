@@ -1,8 +1,9 @@
 from datetime import datetime, timedelta
 
-from app.errors import exceptions as ex
 from jose import jwt
 from passlib.context import CryptContext
+
+from app.errors import exceptions as ex
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 

@@ -1,8 +1,9 @@
 from typing import Any
 
 from app.apis.v1.auth.authentication import Authentication
-from app.apis.v1.auth.refresh_token.repositories.refresh_token_repositories import \
-    RefreshTokenRepository
+from app.apis.v1.auth.refresh_token.repositories.refresh_token_repositories import (
+    RefreshTokenRepository,
+)
 from app.database.redis_manger import init_redis_pool
 from app.errors import exceptions as ex
 from app.models.user import ModelTokenData

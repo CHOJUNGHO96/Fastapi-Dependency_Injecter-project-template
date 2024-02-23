@@ -1,8 +1,8 @@
-from app.apis.v1.news.list.repositories.news_repositories import \
-    NewsListRepository
+from dependency_injector import containers, providers
+
+from app.apis.v1.news.list.repositories.news_repositories import NewsListRepository
 from app.apis.v1.news.list.service.news_service import NewsListService
 from app.apis.v1.news.list.sqlalchemy_helper import SqlalchemyHelper
-from dependency_injector import containers, providers
 
 
 class Container(containers.DeclarativeContainer):

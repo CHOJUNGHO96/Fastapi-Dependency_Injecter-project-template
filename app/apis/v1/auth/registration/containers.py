@@ -1,9 +1,12 @@
-from app.apis.v1.auth.authentication import Authentication
-from app.apis.v1.auth.registration.repositories.registration_repositories import \
-    RegistrationRepository
-from app.apis.v1.auth.registration.service.registration_service import \
-    RegistrationService
 from dependency_injector import containers, providers
+
+from app.apis.v1.auth.authentication import Authentication
+from app.apis.v1.auth.registration.repositories.registration_repositories import (
+    RegistrationRepository,
+)
+from app.apis.v1.auth.registration.service.registration_service import (
+    RegistrationService,
+)
 
 
 class Container(containers.DeclarativeContainer):
