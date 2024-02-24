@@ -1,5 +1,5 @@
 [![Python 3.11](https://img.shields.io/badge/python-3.11-3776AB)](https://docs.python.org/3/whatsnew/3.11.html)
-[![FastApi](https://img.shields.io/badge/framework-fastapi-009688)](https://fastapi.tiangolo.com/ko/)
+[![FastApi](https://img.shields.io/badge/framework-fastapi-009688)](https://fastapi.tiangolo.com/)
 [![dependency injector](https://img.shields.io/badge/DependencyInjector-blue)](https://python-dependency-injector.ets-labs.org/)
 [![Postgresql](https://img.shields.io/badge/Postgresql-15-4169E1)](https://www.postgresql.org/)
 [![Redis](https://img.shields.io/badge/redis-DC382D)](https://redis.io/)
@@ -15,43 +15,43 @@
 [![alembic](https://img.shields.io/badge/migration-alembic-83B81A)](https://alembic.sqlalchemy.org/en/latest/)
 [![poetry](https://img.shields.io/badge/interpreter-poetry-60A5FA)](https://python-poetry.org/)
 
-# Fastapi + Dependency_Injector + Redis + Postgresql + celery Base Project Template
+# Fastapi + Dependency_Injector + Redis + Postgresql + Celery Base Project Template
 
 <!--
-- [Fastapi + Redis + Postgresql + Dependency_Injector Base Project Template](#Fastapi + Redis + Postgresql + Dependency_Injector Base Project Template)
-  - [특징](#특징)
-  - [빌드](#빌드)
-    - [1. .env에 환경변수 세팅](#1-env에-환경변수-세팅)
-    - [2. docker-compose 실행](#2-docker-compose-실행)
-    - [3. fastapi앱 컨테이너 접속하여 마이그레이션 실행](#3-fastapi앱-컨테이너-접속하여-마이그레이션-실행)
-  - [웹요청 동작확인](#웹요청-동작확인-(Postman-사용))
-    - [1. .env에 환경변수 세팅](#1-env에-환경변수-세팅)
-    - [2. docker-compose 실행](#2-docker-compose-실행)
-    - [3. fastapi앱 컨테이너 접속하여 마이그레이션 실행](#3-fastapi앱-컨테이너-접속하여-마이그레이션-실행)
-    - [4. 백그라운드(celery)로 뉴스게시글 등록(3개의 게시글이 등록됨)](4-백그라운드(celery)로-뉴스게시글-등록(3개의-게시글이-등록됨))
-    - [5. 뉴스리스트 조회)](5-뉴스리스트-조회)
-  - [OpenApi 로도 요청가능](OpenApi로도-요청가능)
+- [Fastapi + Redis + Postgresql + Dependency_Injector Base Project Template](#fastapi-redis-postgresql-dependency-injector-base-project-template)
+  - [Features](#features)
+  - [Build](#build)
+    - [1. Setting Environment Variables in .env](#1-setting-environment-variables-in-env)
+    - [2. Executing docker-compose](#2-executing-docker-compose)
+    - [3. Running Migrations in FastAPI App Container](#3-running-migrations-in-fastapi-app-container)
+  - [Web Request Testing (Using Postman)](#web-request-testing-using-postman)
+    - [1. Registering a User](#1-registering-a-user)
+    - [2. Logging In](#2-logging-in)
+    - [3. Posting News Articles](#3-posting-news-articles)
+    - [4. Background Posting of News Articles with Celery (3 Articles Posted)](#4-background-posting-of-news-articles-with-celery-3-articles-posted)
+    - [5. Viewing News List](#5-viewing-news-list)
+  - [Also Requestable via OpenApi](#also-requestable-via-openapi)
   -->
 
-## 특징
+## Features
 
-- [x] **SQLAlchemy 2.0 only**를 사용하여 최상의 비동기 쿼리지원 (SQLAlchemy 2.0.0 was released January 26, 2023)
-- [x] Postgresql database `asyncpg` 라이브러리 사용
+- [x] **SQLAlchemy 2.0 only** for optimal asynchronous query support (Released January 26, 2023)
+- [x] Postgresql database with `asyncpg` library
 - [x] [Alembic](https://alembic.sqlalchemy.org/en/latest/) migrations
-- [x] [Dependency_Injector](https://python-dependency-injector.ets-labs.org/) 라이브러리를 사용하여 DI전략 구현
-- [x] [starlette middleware](https://www.starlette.io/middleware/#basehttpmiddleware) 의 dispatch를 통해 미들웨어 클래스를 구현
-- [x] jwt를 통한 사용자 인증
-- [x] celery, celery-beat 사용을위한 메세지 브로커로 redis를 사용하여 백그라운드 작업 및 스케줄러 작업 구현
-- [x] dockerfile 과 docker-compose.yml 를 통한 빌드
-- [x] docker 빌드시 web서버로 nginx, WSGI로 gunicorn, ASGI로 uvicorn 사용
-- [x] [Poetry](https://python-poetry.org/docs/) 사용하여 인터프리터 관리 용이
-- [x] pytest 비동기 테스트 (fake-redis 사용)
+- [x] Implementing DI strategy using [Dependency_Injector](https://python-dependency-injector.ets-labs.org/) library
+- [x] Middleware class implementation through dispatch in [starlette middleware](https://www.starlette.io/middleware/#basehttpmiddleware)
+- [x] User authentication via JWT
+- [x] Background tasks and scheduler jobs using Redis as the message broker for celery, celery-beat
+- [x] Building with dockerfile and docker-compose.yml
+- [x] Using nginx as web server, gunicorn for WSGI, and uvicorn for ASGI in docker build
+- [x] Easy interpreter management with [Poetry](https://python-poetry.org/docs/)
+- [x] Asynchronous tests with pytest (using fake-redis)
 
-## 빌드
+## Build
 
-### 1. .env에 환경변수 세팅
-루트에있는 env.example을 .env로 변경후 알맞게 세팅해준다. (아래 예제참고) </br>
-<b>주의할점은 DB_HOST와 REDIS_HOST는 docker-compose에 노드네임으로 설정해줘야한다.</b>
+### 1. Setting Environment Variables in .env
+Change the root env.example to .env and set appropriately. (Refer to the example below) </br>
+<b>Attention: DB_HOST and REDIS_HOST should be set as node names in docker-compose.</b>
 ```
 JWT_ALGORITHM=HS256
 JWT_ACCESS_SECRET_KEY=SECRET_KEY
@@ -74,50 +74,50 @@ RABBITMQ_PASSWORD=RABBITMQ_PASSWORD
 RABBITMQ_PORT=5672
 ```
 
-### 2. docker-compose 실행
-빌드를위해 아래명령어 실행후 nginx, fastapi, redis, postgresql, celery, celery-beat 컨테이너 실행확인
+### 2. Executing docker-compose
+Execute the command below for build and check the running containers for nginx, fastapi, redis, postgresql, celery, celery-beat
 ```
 docker-compose up --build
 ```
-컨테이너 조회 docker ps
+Container query with docker ps
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/45c9acc4-9e7b-45d2-be39-a0c08087ec61)
 
 
 
-### 3. fastapi앱 컨테이너 접속하여 마이그레이션 실행
-docker exec -it '컨테이너명' /bin/bash 로 해당 노드접속후 /app경로에서 아래 alembic 명령어 실행
+### 3. Running Migrations in FastAPI App Container
+Access the node with `docker exec -it 'container name' /bin/bash` and execute the following alembic command in /app path
 ```
 alembic upgrade head 
 ```
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/493c26e8-350f-4d31-8f58-7b003d15fea9)
 
 
-## 웹요청 동작확인 (Postman 사용)
+## Web Request Testing (Using Postman)
 
-### 1. 사용자 등록
+### 1. Registering a User
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/3776dc5f-6cdb-4348-9ca4-6582ea7ebf1f)
 
 
-### 2. 로그인
+### 2. Logging In
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/73a60b73-e311-4517-95b0-4d1ab99e82c8)
 
 
-### 3. 뉴스게시글 등록
+### 3. Posting News Articles
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/01adfc4f-069f-49bc-b6ac-285266990a6e)
 
 
-### 4. 백그라운드(celery)로 뉴스게시글 등록(3개의 게시글이 등록됨)
+### 4. Background Posting of News Articles with Celery (3 Articles Posted)
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/6e463ffd-6703-47d5-856e-16ab9aa1b0ec)
 
-celery worker가 메세지 브로커(redis)에 쌓인 task 가져가서 실행
+Celery worker takes tasks queued in the message broker (redis) and executes them
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/1b53b4e2-9584-4d96-939e-77c9a96f0f6e)
 
 
-### 5. 뉴스리스트 조회
+### 5. Viewing News List
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/91d9d97f-b41c-4bb4-a362-1e49752db38d)
 
 
-## OpenApi 로도 요청가능
+## Also Requestable via OpenApi
 Swagger (http://127.0.0.1:8080/api/v1/docs)
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/becd03e6-dc4c-400b-ba44-89e349af6b11)
 
