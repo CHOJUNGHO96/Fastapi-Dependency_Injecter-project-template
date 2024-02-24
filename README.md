@@ -1,4 +1,4 @@
-![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/e476a12e-741d-4c25-b1f3-87aac9466f5f)[![Python 3.11](https://img.shields.io/badge/python-3.11-3776AB)](https://docs.python.org/3/whatsnew/3.11.html)
+[![Python 3.11](https://img.shields.io/badge/python-3.11-3776AB)](https://docs.python.org/3/whatsnew/3.11.html)
 [![FastApi](https://img.shields.io/badge/framework-fastapi-009688)](https://fastapi.tiangolo.com/ko/)
 [![dependency injector](https://img.shields.io/badge/DependencyInjector-blue)](https://python-dependency-injector.ets-labs.org/)
 [![Postgresql](https://img.shields.io/badge/Postgresql-15-4169E1)](https://www.postgresql.org/)
@@ -108,6 +108,7 @@ alembic upgrade head
 
 ### 4. 백그라운드(celery)로 뉴스게시글 등록(3개의 게시글이 등록됨)
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/6e463ffd-6703-47d5-856e-16ab9aa1b0ec)
+
 celery worker가 메세지 브로커(redis)에 쌓인 task 가져가서 실행
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/1b53b4e2-9584-4d96-939e-77c9a96f0f6e)
 
