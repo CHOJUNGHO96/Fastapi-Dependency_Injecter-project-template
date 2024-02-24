@@ -50,8 +50,8 @@
 ## 빌드
 
 ### 1. .env에 환경변수 세팅
-루트에있는 env.example을 .env로 변경후 알맞게 세팅해준다. (아래 예제참고)
-주의할점은 DB_HOST와 REDIS_HOST는 docker-compose에 노드네임으로 설정해줘야한다.
+루트에있는 env.example을 .env로 변경후 알맞게 세팅해준다. (아래 예제참고) </br>
+<b>주의할점은 DB_HOST와 REDIS_HOST는 docker-compose에 노드네임으로 설정해줘야한다.</b>
 ```
 JWT_ALGORITHM=HS256
 JWT_ACCESS_SECRET_KEY=SECRET_KEY
