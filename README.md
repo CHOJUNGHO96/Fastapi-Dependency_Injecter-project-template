@@ -1,4 +1,4 @@
-[![Python 3.11](https://img.shields.io/badge/python-3.11-3776AB)](https://docs.python.org/3/whatsnew/3.11.html)
+![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/e476a12e-741d-4c25-b1f3-87aac9466f5f)[![Python 3.11](https://img.shields.io/badge/python-3.11-3776AB)](https://docs.python.org/3/whatsnew/3.11.html)
 [![FastApi](https://img.shields.io/badge/framework-fastapi-009688)](https://fastapi.tiangolo.com/ko/)
 [![dependency injector](https://img.shields.io/badge/DependencyInjector-blue)](https://python-dependency-injector.ets-labs.org/)
 [![Postgresql](https://img.shields.io/badge/Postgresql-15-4169E1)](https://www.postgresql.org/)
@@ -19,12 +19,18 @@
 
 - [Fastapi + Redis + Postgresql + Dependency_Injector Base Project Template](#Fastapi + Redis + Postgresql + Dependency_Injector Base Project Template)
   - [특징](#특징)
-  - [빌드](#quickstart)
-    - [1. .env에 환경변수 세팅](#1-.env에-환경변수-세팅)
+  - [빌드](#빌드)
+    - [1. .env에 환경변수 세팅](#1-env에-환경변수-세팅)
     - [2. docker-compose 실행](#2-docker-compose-실행)
-    - [3. fastapi앱 컨테이너 접속하여 마이그레이션 실행](#3-fastapi앱-컨테이너-접속하여-마이그레이션-실행)    
+    - [3. fastapi앱 컨테이너 접속하여 마이그레이션 실행](#3-fastapi앱-컨테이너-접속하여-마이그레이션-실행)
+  - [웹요청 동작확인](#웹요청-동작확인-(Postman-사용))
+    - [1. .env에 환경변수 세팅](#1-env에-환경변수-세팅)
+    - [2. docker-compose 실행](#2-docker-compose-실행)
+    - [3. fastapi앱 컨테이너 접속하여 마이그레이션 실행](#3-fastapi앱-컨테이너-접속하여-마이그레이션-실행)
+    - [4. 백그라운드(celery)로 뉴스게시글 등록(3개의 게시글이 등록됨)](4-백그라운드(celery)로-뉴스게시글-등록(3개의-게시글이-등록됨))
+    - [5. 뉴스리스트 조회)](5-뉴스리스트-조회)
+  - [OpenApi 로도 요청가능](OpenApi로도-요청가능)
 
-  
 ## 특징
 
 - [x] **SQLAlchemy 2.0 only**를 사용하여 최상의 비동기 쿼리지원 (SQLAlchemy 2.0.0 was released January 26, 2023)
@@ -42,7 +48,7 @@
 ## 빌드
 
 ### 1. .env에 환경변수 세팅
-루트에있는 .env.example을 .env로 변경후 알맞게 세팅해준다. (아래 예제참고)
+루트에있는 env.example을 .env로 변경후 알맞게 세팅해준다. (아래 예제참고)
 주의할점은 DB_HOST와 REDIS_HOST는 docker-compose에 노드네임으로 설정해줘야한다.
 ```
 JWT_ALGORITHM=HS256
@@ -84,15 +90,33 @@ alembic upgrade head
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/493c26e8-350f-4d31-8f58-7b003d15fea9)
 
 
+## 웹요청 동작확인 (Postman 사용)
+
+### 1. 사용자 등록
+![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/3776dc5f-6cdb-4348-9ca4-6582ea7ebf1f)
 
 
+### 2. 로그인
+![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/73a60b73-e311-4517-95b0-4d1ab99e82c8)
 
 
+### 3. 뉴스게시글 등록
+![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/01adfc4f-069f-49bc-b6ac-285266990a6e)
 
 
+### 4. 백그라운드(celery)로 뉴스게시글 등록(3개의 게시글이 등록됨)
+![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/6e463ffd-6703-47d5-856e-16ab9aa1b0ec)
+celery worker가 메세지 브로커(redis)에 쌓인 task 가져가서 실행
+![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/1b53b4e2-9584-4d96-939e-77c9a96f0f6e)
 
 
+### 5. 뉴스리스트 조회
+![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/91d9d97f-b41c-4bb4-a362-1e49752db38d)
 
+
+## OpenApi 로도 요청가능
+Swagger (http://127.0.0.1:8080/api/v1/docs)
+![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/becd03e6-dc4c-400b-ba44-89e349af6b11)
 
 
 
