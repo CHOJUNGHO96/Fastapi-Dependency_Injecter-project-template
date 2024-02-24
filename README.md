@@ -39,7 +39,7 @@
 - [x] Postgresql database `asyncpg` 라이브러리 사용
 - [x] [Alembic](https://alembic.sqlalchemy.org/en/latest/) migrations
 - [x] [Dependency_Injector](https://python-dependency-injector.ets-labs.org/) 라이브러리를 사용하여 DI전략 구현
-- [x] [starlette middleware] 의 dispatch를 통해 미들웨어 클래스를 구현
+- [x] [starlette middleware](https://www.starlette.io/middleware/#basehttpmiddleware) 의 dispatch를 통해 미들웨어 클래스를 구현
 - [x] jwt를 통한 사용자 인증
 - [x] celery, celery-beat 사용을위한 메세지 브로커로 redis를 사용하여 백그라운드 작업 및 스케줄러 작업 구현
 - [x] dockerfile 과 docker-compose.yml 를 통한 빌드
