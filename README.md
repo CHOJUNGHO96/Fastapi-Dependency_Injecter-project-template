@@ -17,6 +17,7 @@
 
 # Fastapi + Dependency_Injector + Redis + Postgresql + celery Base Project Template
 
+<!--
 - [Fastapi + Redis + Postgresql + Dependency_Injector Base Project Template](#Fastapi + Redis + Postgresql + Dependency_Injector Base Project Template)
   - [특징](#특징)
   - [빌드](#빌드)
@@ -30,6 +31,7 @@
     - [4. 백그라운드(celery)로 뉴스게시글 등록(3개의 게시글이 등록됨)](4-백그라운드(celery)로-뉴스게시글-등록(3개의-게시글이-등록됨))
     - [5. 뉴스리스트 조회)](5-뉴스리스트-조회)
   - [OpenApi 로도 요청가능](OpenApi로도-요청가능)
+  -->
 
 ## 특징
 
