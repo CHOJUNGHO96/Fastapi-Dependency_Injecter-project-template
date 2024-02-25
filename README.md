@@ -84,6 +84,7 @@
 - [x] Using nginx as web server, gunicorn for WSGI, and uvicorn for ASGI in docker build
 - [x] Easy interpreter management with [Poetry](https://python-poetry.org/docs/)
 - [x] Asynchronous tests with pytest (using fake-redis)
+- [x] All responses are unified to [fastapi JSONResponse](https://fastapi.tiangolo.com/advanced/response-directly/#using-the-jsonable_encoder-in-a-response)
 
 ## Build
 
