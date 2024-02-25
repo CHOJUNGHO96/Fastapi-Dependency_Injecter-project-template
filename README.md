@@ -137,7 +137,7 @@ alembic upgrade head
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/3776dc5f-6cdb-4348-9ca4-6582ea7ebf1f)
 
 
-### 2. Logging In
+### 2. Login
 ![image](https://github.com/CHOJUNGHO96/Fastapi-dependency_injector-Redis-Postgresql-docker-ProjectTemplate/assets/61762674/73a60b73-e311-4517-95b0-4d1ab99e82c8)
 
 
