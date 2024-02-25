@@ -28,7 +28,10 @@ class NewsCrawling:
         async with self.session_factory() as session:
             get_last_news = await session.scalars(select(News).order_by(News.article_id.desc()).limit(1))
             if news_data := get_last_news.first():
-                url_id = int(news_data.url.split("=")[-1])
+                try:
+                    url_id = int(news_data.url.split("=")[-1])
+                except ValueError:
+                    url_id = 264834
             else:
                 url_id = 264834
 
