@@ -17,22 +17,6 @@
 
 # Fastapi + Dependency_Injector + Redis + Postgresql + Celery Base Project Template
 
-<!--
-- [Fastapi + Redis + Postgresql + Dependency_Injector Base Project Template](#fastapi-redis-postgresql-dependency-injector-base-project-template)
-  - [Features](#features)
-  - [Build](#build)
-    - [1. Setting Environment Variables in .env](#1-setting-environment-variables-in-env)
-    - [2. Executing docker-compose](#2-executing-docker-compose)
-    - [3. Running Migrations in FastAPI App Container](#3-running-migrations-in-fastapi-app-container)
-  - [Web Request Testing (Using Postman)](#web-request-testing-using-postman)
-    - [1. Registering a User](#1-registering-a-user)
-    - [2. Logging In](#2-logging-in)
-    - [3. Posting News Articles](#3-posting-news-articles)
-    - [4. Background Posting of News Articles with Celery (3 Articles Posted)](#4-background-posting-of-news-articles-with-celery-3-articles-posted)
-    - [5. Viewing News List](#5-viewing-news-list)
-  - [Also Requestable via OpenApi](#also-requestable-via-openapi)
-  -->
-
 ## Directory structure
 ```
 ├─app
