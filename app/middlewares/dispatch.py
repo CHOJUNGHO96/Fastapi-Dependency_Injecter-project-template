@@ -50,7 +50,7 @@ async def dispatch_middleware(request: Request, call_next):
     # 토큰검증없이 접속가능한 url 처리 작업
     url = request.url.path
     try:
-        if await url_pattern_check(url, "^(/docs|/redoc|/api/v1/auth)") or url in [
+        if await url_pattern_check(url, "^(/api/v1/docs|/api/v1/redoc|/api/v1/auth)") or url in [
             "/",
             "/openapi.json",
         ]:

@@ -16,7 +16,7 @@ def create_app() -> FastAPI:
     # 컨테이너 초기화
     container = Container()
 
-    _app = FastAPI()
+    _app = FastAPI(docs_url="/api/v1/docs", redoc_url="/api/v1/redoc")
 
     _app.container = container
 
