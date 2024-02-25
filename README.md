@@ -33,6 +33,44 @@
   - [Also Requestable via OpenApi](#also-requestable-via-openapi)
   -->
 
+## Directory structure
+```
+├─app
+│  ├─apis
+│  │  └─v1
+│  │      ├─auth
+│  │      │  ├─login
+│  │      │  │  ├─repositories
+│  │      │  │  └─service
+│  │      │  ├─logout
+│  │      │  ├─refresh_token
+│  │      │  │  ├─repositories
+│  │      │  │  └─service
+│  │      │  ├─registration
+│  │      │  │  ├─repositories
+│  │      │  │  └─service
+│  │      ├─background
+│  │      │  └─news_crawling
+│  │      └─news
+│  │          └─list
+│  │              ├─repositories
+│  │              └─service
+│  ├─celery_task
+│  │  └─job
+│  ├─common
+│  ├─database
+│  │  └─schema
+│  ├─errors
+│  ├─middlewares
+│  ├─models
+│  └─util
+├─migrations
+│  └─versions
+├─nginx
+└─scripts
+```
+
+
 ## Features
 
 - [x] **SQLAlchemy 2.0 only** for optimal asynchronous query support (Released January 26, 2023)
