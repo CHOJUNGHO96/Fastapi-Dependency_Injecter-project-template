@@ -69,6 +69,7 @@
 - [x] Easy interpreter management with [Poetry](https://python-poetry.org/docs/)
 - [x] Asynchronous tests with pytest (using fake-redis)
 - [x] All endpoint responses are unified to [fastapi JSONResponse](https://fastapi.tiangolo.com/advanced/response-directly/#using-the-jsonable_encoder-in-a-response)
+- [x] [pre-commit](https://pre-commit.com/) with poetry export and ruff
 
 ## Build
 
