@@ -1,26 +1,26 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 
 
 class ModelNewsBase(BaseModel):
-    article_id: int | None = None
-    title: str | None = None
-    content: str | None = None
-    source: str | None = None
-    url: str | None = None
-    user_id: int | None = None
+    article_id: int | None = Field(default=None, example="뉴스기사 번호")
+    title: str | None = Field(default=None, example="뉴스기사 제목")
+    content: str | None = Field(default=None, example="뉴스기사 내용")
+    source: str | None = Field(default=None, example="뉴스기사 출처")
+    url: str | None = Field(default=None, example="뉴스기사 URL")
+    user_id: int | None = Field(default=None, example="작성자")
 
 
 class ModelNewsRegister(BaseModel):
-    title: str
-    content: str
-    source: str
-    url: str
-    user_id: int
+    title: str = Field(default=None, example="뉴스기사 제목")
+    content: str = Field(default=None, example="뉴스기사 내용")
+    source: str = Field(default=None, example="뉴스기사 출처")
+    url: str = Field(default=None, example="뉴스기사 URL")
+    user_id: int = Field(default=None, example="작성자")
 
 
 class ModelNewsPut(ModelNewsBase):
-    article_id: int
+    article_id: int = Field(default=None, example="뉴스기사 번호")
 
 
 class ModelNewsDelete(BaseModel):
-    article_id: int
+    article_id: int = Field(default=None, example="뉴스기사 번호")
